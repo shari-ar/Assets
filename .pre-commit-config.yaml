@@ -1,0 +1,45 @@
+repos:
+  # Essential sanity checks and file hygiene. Pin to the latest stable
+  # release (v6.0.0 as of Aug 2025). These hooks trim trailing whitespace,
+  # ensure YAML/JSON validity and prevent accidentally committing huge files【159746283155068†L86-L104】.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+
+  # Ruff provides ultra‑fast linting and formatting. We pin to v0.14.3 (Oct 31 2025)
+  # and run both the linter and formatter. The linter’s fix flag is enabled so
+  # obvious issues are auto‑corrected; --show-fixes lists what was changed【309834968740184†L273-L321】.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.3
+    hooks:
+      - id: ruff-check
+        args: ["--fix", "--show-fixes"]
+      - id: ruff-format
+
+  # Black enforces a consistent coding style.  We pin to the latest stable tag
+  # (25.1.0) and target Python 3.13 so type hint syntax is parsed correctly【285620239275470†L76-L86】.
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3.13
+
+  # isort sorts imports and is configured to follow Black’s style【285620239275470†L87-L92】.
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+
+  # mypy performs static type checking. Pin to v1.17.0 and ignore missing
+  # imports for third‑party libs【285620239275470†L100-L107】.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.17.0
+    hooks:
+      - id: mypy
+        args: ["--ignore-missing-imports"]

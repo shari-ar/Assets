@@ -1,0 +1,54 @@
+## Project configuration for the dev container
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+
+## Ruff configuration.  The extended rule set below is recommended by the
+## Scientific Python development guide, which selects a broad suite of
+## flake8 and pylint rule groups for robust linting【159746283155068†L230-L266】.
+## Lines are ignored that conflict with our styling choices (e.g. magic values).
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-select = [
+  "ARG",  # flake8-unused-arguments【159746283155068†L245-L246】
+  "B",    # flake8-bugbear【159746283155068†L245-L246】
+  "C4",   # flake8-comprehensions【159746283155068†L245-L246】
+  "EM",   # flake8-errmsg【159746283155068†L245-L246】
+  "EXE",  # flake8-executable【159746283155068†L245-L246】
+  "FURB", # refurb【159746283155068†L245-L255】
+  "G",    # flake8-logging-format【159746283155068†L245-L255】
+  "I",    # isort【159746283155068†L252-L253】
+  "ICN",  # flake8-import-conventions【159746283155068†L252-L254】
+  "NPY",  # NumPy specific rules【159746283155068†L254-L256】
+  "PD",   # pandas-vet【159746283155068†L255-L256】
+  "PGH",  # pygrep-hooks【159746283155068†L256-L257】
+  "PIE",  # flake8-pie【159746283155068†L256-L257】
+  "PL",   # pylint【159746283155068†L256-L259】
+  "PT",   # flake8-pytest-style【159746283155068†L256-L260】
+  "PTH",  # flake8-use-pathlib【159746283155068†L256-L261】
+  "PYI",  # flake8-pyi【159746283155068†L256-L264】
+  "RET",  # flake8-return【159746283155068†L260-L266】
+  "RUF",  # Ruff-specific【159746283155068†L261-L266】
+  "SIM",  # flake8-simplify【159746283155068†L263-L266】
+  "T20",  # flake8-print【159746283155068†L264-L266】
+  "UP"    # pyupgrade【159746283155068†L265-L266】
+]
+ignore = [
+  "PLR09",    # too many branches/returns/statements【159746283155068†L269-L272】
+  "PLR2004"   # magic value used in comparison【159746283155068†L269-L273】
+]
+
+# Configure mypy for strict type checking
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
+warn_unused_configs = true
+check_untyped_defs = true
+strict = true

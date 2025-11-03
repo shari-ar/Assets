@@ -1,0 +1,62 @@
+{
+  "name": "Django Ninja + Next.js HeroUI Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:debian-12",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts",
+      "pnpmVersion": "latest",
+      "installYarnUsingApt": false,
+      "nodeGypDependencies": false
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      // Use Python 3.13 instead of 3.14. Python 3.14 switched from PGP to Sigstore
+      // signatures, which the current devcontainer Python feature does not yet
+      // support. Selecting 3.13 avoids signature verification failures during
+      // build【547689539405665†L100-L109】.
+      "version": "3.13",
+      // Install a curated set of education and quality tools.  Ruff provides a
+      // fast linter and formatter, black formats code consistently, isort sorts
+      // imports, mypy adds type checking, pytest allows writing tests, pdoc
+      // generates documentation, and pre-commit sets up hooks to run these
+      // tools automatically.  Use an ASCII hyphen in `pre-commit` to avoid
+      // shell parsing issues during installation.
+      "toolsToInstall": "ruff,black,isort,mypy,pytest,pdoc,pre-commit,mkdocs"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-typescript-next",
+        "github.copilot"
+      ],
+      "settings": {
+        "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.analysis.typeCheckingMode": "strict",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        },
+        "npm.packageManager": "pnpm",
+        "files.exclude": {
+          "**/__pycache__": true
+        }
+      }
+    }
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "python -m pip install --upgrade pip && pre-commit install --install-hooks && pip install mkdocs-gitbook",
+  "overrideFeatureInstallOrder": [
+    "ghcr.io/devcontainers/features/python",
+    "ghcr.io/devcontainers/features/node"
+  ]
+}
