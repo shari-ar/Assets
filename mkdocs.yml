@@ -1,4 +1,5 @@
 site_name: Assets
+site_url: https://shari-ar.github.io/Assets/
 nav:
   - Home: index.md
 theme:
