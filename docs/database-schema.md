@@ -2,9 +2,7 @@
 
 ## Overview
 
-This document defines the **database schema** for the **Assets** platform.  
-It outlines all major tables, relationships, constraints, and indexing strategies.  
-The platform uses **PostgreSQL** as the relational database engine, ensuring ACID compliance, foreign key integrity, and high scalability.
+This document defines the **database schema** for the **Assets** platform. It outlines all major tables, relationships, constraints, and indexing strategies. The platform uses **PostgreSQL** as the relational database engine, ensuring ACID compliance, foreign key integrity, and high scalability.
 
 ---
 
@@ -12,7 +10,7 @@ The platform uses **PostgreSQL** as the relational database engine, ensuring ACI
 
 - **Normalization:** Third Normal Form (3NF) to reduce redundancy.
 - **Auditability:** All wallet and ticket operations are logged.
-- **Security:** Role-based access and optional Row-Level Security (RLS).
+- **Security:** Role-based access and Row-Level Security (RLS).
 - **Extensibility:** Modular tables to support new features such as asset categories or payment gateways.
 - **Integrity:** Foreign keys, constraints, and cascade rules ensure consistent data.
 
@@ -21,11 +19,11 @@ The platform uses **PostgreSQL** as the relational database engine, ensuring ACI
 ## Entity Relationship Diagram (ERD)
 
 ```
-┌────────────┐     ┌──────────────┐      ┌───────────────┐
-│   users    │──┐  │   tickets    │──┐   │   payments    │
-└────────────┘  │  └──────────────┘  │   └───────────────┘
-      │         │        │           │          │
-      ▼         ▼        ▼           ▼          ▼
+   ┌────────────┐     ┌──────────────┐          ┌───────────────┐
+   │   users    │──┐  │   tickets    │──┐       │   payments    │
+   └────────────┘  │  └──────────────┘  │       └───────────────┘
+         │         │        │           │              │
+         ▼         ▼        ▼           ▼              ▼
 ┌────────────┐  ┌──────────────┐  ┌────────────┐  ┌──────────────┐
 │  wallets   │  │ ledger_entry │  │  reports   │  │ notifications│
 └────────────┘  └──────────────┘  └────────────┘  └──────────────┘
@@ -172,13 +170,13 @@ Stores aggregated data for dashboards and analytics.
 Tracks messages sent via SMS, WhatsApp, or email.
 
 | Column       | Type                           | Description      |
-| ------------ | ------------------------------ | ---------------- | --- |
+| ------------ | ------------------------------ | ---------------- |
 | `id`         | SERIAL                         | PK               |
 | `user_id`    | INT                            | FK → users.id    |
 | `channel`    | ENUM('sms','whatsapp','email') |                  |
 | `message`    | TEXT                           |                  |
-| `status`     | ENUM('queued','sent','failed') | DEFAULT 'queued' |     |
-| `created_at` | TIMESTAMP                      | DEFAULT now()    |     |
+| `status`     | ENUM('queued','sent','failed') | DEFAULT 'queued' |
+| `created_at` | TIMESTAMP                      | DEFAULT now()    |
 
 ---
 
@@ -201,9 +199,3 @@ Tracks messages sent via SMS, WhatsApp, or email.
 - Schema versioning via Django migration history.
 - Foreign key constraints use `ON DELETE CASCADE` for dependent records.
 - Regular vacuum and analyze scheduled for performance optimization.
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

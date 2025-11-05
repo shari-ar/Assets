@@ -1,9 +1,8 @@
-# Auth & Security Guide
+# Auth & Security
 
 ## Overview
 
-This document outlines the **authentication, authorization, and security standards** implemented in the **Assets** platform.  
-The system employs **OAuth 2.0**, **JWT-based session management**, and strong encryption practices (AES-256, SHA-256) to safeguard user data and operations.
+This document outlines the **authentication, authorization, and security standards** implemented in the **Assets** platform. The system employs **OAuth 2.0**, **JWT-based session management**, and strong encryption practices (AES-256, SHA-256) to safeguard user data and operations.
 
 ---
 
@@ -124,18 +123,3 @@ Logs are immutable and periodically exported to an archival storage system.
 3. Eradicate → Patch vulnerabilities and rotate secrets.
 4. Recover → Restore service and notify stakeholders.
 5. Review → Conduct post-mortem and update policies.
-
----
-
-## References
-
-- [Django Ninja Security Docs](https://django-ninja.rest-framework.com)
-- [OAuth 2.0 RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
-- [JWT RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519)
-- [OWASP Top 10 2025](https://owasp.org/www-project-top-ten/)
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

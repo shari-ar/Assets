@@ -1,10 +1,8 @@
-# Backend Guide
+# Backend
 
 ## Overview
 
-The **Assets** backend is built using **Django** and **Django Ninja**, providing a clean, secure, and scalable API foundation.  
-It handles authentication, wallet management, ticket operations, payment integration, and reporting.  
-The backend adheres to RESTful principles and integrates seamlessly with the Next.js frontend.
+The **Assets** backend is built using **Django** and **Django Ninja**, providing a clean, secure, and scalable API foundation. It handles authentication, wallet management, ticket operations, payment integration, and reporting. The backend adheres to RESTful principles and integrates seamlessly with the Next.js frontend.
 
 ---
 
@@ -12,14 +10,14 @@ The backend adheres to RESTful principles and integrates seamlessly with the Nex
 
 | Category   | Technology                     | Purpose                                        |
 | ---------- | ------------------------------ | ---------------------------------------------- |
-| Framework  | **Django 5.x**                 | Core backend and ORM                           |
-| API Layer  | **Django Ninja**               | Fast type-safe REST API using Pydantic models  |
+| Framework  | **Django**                     | Core backend and ORM                           |
+| API Layer  | **Django Ninja 1.4.x**         | Fast type-safe REST API using Pydantic models  |
 | Database   | **PostgreSQL**                 | Relational storage with strong ACID guarantees |
 | Auth       | **JWT + OAuth 2.0**            | Secure authentication and SSO support          |
 | Testing    | **PyTest, Django Test Client** | Automated unit and integration testing         |
 | Caching    | **Redis**                      | Session and rate-limit caching                 |
-| Task Queue | **Celery** (optional)          | Background jobs and notifications              |
-| Deployment | **Docker / Railway / Render**  | Flexible cloud deployment                      |
+| Task Queue | **Celery**                     | Background jobs and notifications              |
+| Deployment | **GHCR**                       | Easy deployment                                |
 | Security   | **AES-256, SHA-256, HTTPS**    | Encryption and integrity                       |
 
 ---
@@ -140,7 +138,7 @@ Manages the end-to-end asset lending workflow.
 
 Zarinpal integration ensures secure, traceable payments.
 
-- Initiates payment on ticket acceptance.
+- Initiates payment on wallet recharge.
 - Verifies transaction via callback from Zarinpal API.
 - Updates wallet balances upon confirmation.
 
@@ -242,7 +240,6 @@ python manage.py migrate
 - Add PostgreSQL **indexes** on foreign keys and frequently queried fields.
 - Cache API responses for frequent reads.
 - Configure **Gunicorn** workers for concurrency.
-- Use async tasks (Celery) for long-running operations.
 
 ---
 
@@ -254,9 +251,3 @@ python manage.py migrate
 - Use Django’s built-in CSRF protection.
 - Regular vulnerability scans and dependency updates.
 - Enable rate limiting and IP throttling.
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

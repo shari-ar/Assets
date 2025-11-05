@@ -2,14 +2,12 @@
 
 ## 1. Purpose
 
-This document defines the **system-level design** for the _Assets_ platform — a peer-to-peer asset lending system.  
-It describes the overall architecture, functional modules, interactions, and scalability considerations to guide developers, contributors, and learners.
+This document defines the **system-level design** for the _Assets_ platform — a peer-to-peer asset lending system. It describes the overall architecture, functional modules, interactions, and scalability.
 
 ---
 
 ## 2. Goals and Principles
 
-- **Educational clarity:** Simple, transparent, and open-source architecture suitable for learning.
 - **Security first:** Encrypted data flows, strict role boundaries, and auditable transactions.
 - **Extensibility:** Modular services and replaceable adapters for payments, storage, and notifications.
 - **Performance:** Efficient API responses and database queries under concurrent load.
@@ -60,13 +58,16 @@ The system consists of five major components:
 
 ## 5. Data Flow Diagram
 
-+-----------+ +--------------+ +--------------+ +-------------+
-| Browser | <----> | API Gateway | <----> | Core Services | <----> | PostgreSQL |
-| (Next.js) | | (Django) | | (Auth,Wallet, | | (RLS, Logs) |
-| | | | | Tickets...) | | |
-+-----------+ +--------------+ +--------------+ +-------------+
-| | | |
-+--> Zarinpal, SMS, Email Integrations <------+
+```
++-----------+        +-------------+        +---------------+        +-------------+
+|  Browser  | <----> | API Gateway | <----> | Core Services | <----> | PostgreSQL  |
+| (Next.js) |        |  (Django)   |        | (Auth,Wallet, |        | (RLS, Logs) |
+|           |        |             |        | Tickets...)   |        |             |
++-----------+        +-------------+        +---------------+        +-------------+
+|           |        |             |
++--> Zarinpal, SMS,
+        Email Integrations <------+
+```
 
 ---
 
@@ -109,18 +110,3 @@ The system consists of five major components:
 - Smart matching between lenders and borrowers.
 - Reporting dashboards with time-series analytics.
 - Optional blockchain-based escrow layer.
-
----
-
-## 10. References
-
-- `architecture.md` — overall structure and data models
-- Django Ninja API schema (`/api/docs`)
-- Zarinpal Payment Integration docs
-- Next.js and HeroUI component library
-
----
-
-**Maintainer:** [Shahriyar](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

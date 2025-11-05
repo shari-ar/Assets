@@ -2,8 +2,7 @@
 
 ## Overview
 
-The **Assets** platform includes a comprehensive testing strategy to ensure the reliability, security, and correctness of both backend and frontend components.  
-Testing is automated using **PyTest**, **Django Test Client**, and **Playwright**, with continuous integration handled through GitHub Actions.
+The **Assets** platform includes a comprehensive testing strategy to ensure the reliability, security, and correctness of both backend and frontend components. Testing is automated using **PyTest**, **Django Test Client**, and **Playwright**, with continuous integration handled through GitHub Actions.
 
 ---
 
@@ -32,7 +31,7 @@ Testing is automated using **PyTest**, **Django Test Client**, and **Playwright*
 
 ### 1. Unit Tests
 
-- Use **PyTest** for lightweight, fast-running tests.
+- **PyTest** for lightweight, fast-running tests.
 - Tests cover models, services, and utility functions.
 
 **Example (`tests/test_wallet.py`):**
@@ -256,16 +255,10 @@ View results in `htmlcov/index.html`.
 
 ---
 
-## Best Practices
+## Checklist
 
 - Test both **happy** and **failure** paths.
 - Keep tests **idempotent** and **independent**.
 - Use **factory methods** for repeatable data creation.
 - Run tests before each deployment.
 - Use GitHub badges to display CI test status.
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

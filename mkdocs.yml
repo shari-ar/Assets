@@ -4,15 +4,15 @@ site_author: Shahriyar Gorgany
 site_url: https://shari-ar.github.io/Assets/
 repo_url: https://github.com/shari-ar/Assets/
 nav:
-  - "📘 Architecture Guide": index.md
+  - "📘 Architecture": index.md
   - "🧱 System Design Spec": system-design.md
   - "🧩 API Reference": api-reference.md
-  - "🔐 Auth & Security Guide": auth-security-guide.md
+  - "🔐 Auth & Security": auth-security.md
   - "💰 Payment Integration": payment-integration.md
   - "🧮 Database Schema": database-schema.md
-  - "🪄 Frontend Guide": frontend-guide.md
-  - "⚙️ Backend Guide": backend-guide.md
-  - "🔍 Testing Guide": testing-guide.md
+  - "🪄 Frontend": frontend.md
+  - "⚙️ Backend": backend.md
+  - "🔍 Testing": testing.md
   - "🧠 DevOps & Deployment": devops-deployment.md
   - "📦 Monorepo Management": monorepo-management.md
   - "📲 Notifications & Messaging": notifications-messaging.md

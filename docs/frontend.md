@@ -1,9 +1,8 @@
-# Frontend Guide
+# Frontend
 
 ## Overview
 
-The **Assets** frontend is a modern, responsive, and component-driven web application built with **Next.js** and **HeroUI**.  
-It serves as the user interface for managing authentication, asset lending, ticket tracking, wallets, and dashboards.
+The **Assets** frontend is a modern, responsive, and component-driven web application built with **Next.js** and **HeroUI**. It serves as the user interface for managing authentication, asset lending, ticket tracking, wallets, and dashboards.
 
 ---
 
@@ -11,8 +10,8 @@ It serves as the user interface for managing authentication, asset lending, tick
 
 | Category         | Technology                       | Purpose                                   |
 | ---------------- | -------------------------------- | ----------------------------------------- |
-| Framework        | **Next.js 14 (React 18)**        | Server-side rendering (SSR) and routing   |
-| UI Library       | **HeroUI**                       | Modern responsive UI components           |
+| Framework        | **Next.js**                      | Server-side rendering (SSR) and routing   |
+| UI Library       | **HeroUI 2.8.x**                 | Modern responsive UI components           |
 | State Management | **Zustand** or **React Context** | Global state handling for auth and wallet |
 | Styling          | **Tailwind CSS**                 | Utility-first CSS framework               |
 | Forms            | **React Hook Form**              | Form handling and validation              |
@@ -152,10 +151,9 @@ export const useAuth = () => useContext(AuthContext);
 ## UI Design Guidelines
 
 - **Color Palette:** Neutral background, HeroUI primary theme, soft shadows, rounded corners.
-- **Typography:** Inter or Poppins fonts for readability.
+- **Typography:** Vazirmatn font for readability.
 - **Layout:** Responsive grid with sidebar navigation for dashboards.
-- **Accessibility:** Keyboard navigation and ARIA attributes where applicable.
-- **Dark Mode:** Optional via Tailwind’s `dark:` class variants.
+- **Accessibility & Dark Mode:** Handled by HeroUI.
 
 ---
 
@@ -177,21 +175,7 @@ npm run test
 
 ## Deployment
 
-Frontend is deployed via **Vercel** (recommended) or Docker.
-
-**Vercel Deployment Example:**
-
-```bash
-vercel --prod
-```
-
-**Environment Variables:**
-
-```
-NEXT_PUBLIC_API_URL=https://api.assets.example.com
-NEXT_PUBLIC_ZARINPAL_SANDBOX=true
-NEXT_PUBLIC_SITE_URL=https://assets.example.com
-```
+Frontend is deployed via GHCR.
 
 ---
 
@@ -212,9 +196,3 @@ NEXT_PUBLIC_SITE_URL=https://assets.example.com
 - Advanced animations with Framer Motion.
 - Localization (i18n) for multi-language support.
 - Component theming using CSS variables.
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT

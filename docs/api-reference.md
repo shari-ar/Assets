@@ -4,8 +4,8 @@
 
 This document provides the API reference for the **Assets** platform. All endpoints are implemented using **Django Ninja** and protected via **JWT authentication** with optional OAuth 2.0 integration.
 
-Base URL:  
-`https://api.assets.example.com/api/v1/`
+Base URL: `https://{host}[:{port}]/api/v1/`
+Full Docs: `{Base-URL}/docs/`
 
 ---
 
@@ -250,9 +250,3 @@ All endpoints return standardized error responses:
 | 403       | Forbidden    |
 | 404       | Not Found    |
 | 500       | Server Error |
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT
