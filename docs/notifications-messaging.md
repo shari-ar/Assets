@@ -1,9 +1,8 @@
-# Notifications & Messaging Guide
+# Notifications & Messaging
 
 ## Overview
 
-The **Assets** platform includes a comprehensive **Notifications & Messaging** subsystem that delivers real-time and asynchronous updates to users.  
-It supports multiple communication channels—**SMS**, **WhatsApp**, and **Email**—to ensure high engagement and transparency throughout the asset lending process.
+The **Assets** platform includes a comprehensive **Notifications & Messaging** subsystem that delivers real-time and asynchronous updates to users. It supports multiple communication channels—**SMS**, **WhatsApp**, and **Email**—to ensure high engagement and transparency throughout the asset lending process.
 
 ---
 
@@ -14,23 +13,6 @@ It supports multiple communication channels—**SMS**, **WhatsApp**, and **Email
 - Allow admin and automated system alerts.
 - Enable retry mechanisms for failed messages.
 - Maintain auditable logs for compliance and debugging.
-
----
-
-## System Architecture
-
-```
-+-------------------+         +---------------------+
-| Django Backend    |  --->   | Notification Queue  |
-| (Notification API)|         | (Celery + Redis)    |
-+-------------------+         +---------------------+
-           |                              |
-           v                              v
-     +------------+               +---------------+
-     | SMS / Email|               | WhatsApp / API|
-     | Providers  |               | Adapters      |
-     +------------+               +---------------+
-```
 
 ---
 
@@ -76,7 +58,7 @@ It supports multiple communication channels—**SMS**, **WhatsApp**, and **Email
 
 ## Message Templates
 
-Templates are stored as Markdown or HTML files and rendered with variables using Django’s `Template` engine.
+Templates are stored as Markdown files and rendered with variables using Django’s `Template` engine.
 
 **Example Template (`templates/notifications/ticket_accepted.txt`):**
 
@@ -109,7 +91,7 @@ message = render_to_string("notifications/ticket_accepted.txt", {
 
 ### 1. Email
 
-- Sent via **Postmark** or **SendGrid** (configurable).
+- Sent via **Postmark**.
 - Supports HTML templates and attachments.
 - Utilizes Django’s built-in email backend with async wrappers.
 
@@ -128,7 +110,7 @@ send_mail(
 
 ### 2. SMS
 
-- Integrates with **Kavenegar** or **Ghasedak** API.
+- Integrates with [**sms.ir**](https://sms.ir/).
 - Short messages for transaction and verification updates.
 
 **Example SMS Payload:**
@@ -142,7 +124,7 @@ send_mail(
 
 ### 3. WhatsApp
 
-- Uses Twilio or Meta Graph API for message delivery.
+- Uses Twilio for message delivery.
 - Supports template-based and custom messages.
 - Requires verified business account and webhook setup.
 
@@ -163,60 +145,13 @@ requests.post("https://graph.facebook.com/v17.0/<phone_id>/messages", json={
 
 ## Configuration
 
-All notification services are configured via environment variables.
-
-**Example `.env` variables:**
-
-```
-# Email
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.postmarkapp.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=apikey
-EMAIL_HOST_PASSWORD=secret
-DEFAULT_FROM_EMAIL=no-reply@assets.example.com
-
-# SMS
-SMS_PROVIDER=KAVENEGAR
-KAVENEGAR_API_KEY=your_api_key
-
-# WhatsApp
-WHATSAPP_PROVIDER=TWILIO
-WHATSAPP_ACCOUNT_SID=your_sid
-WHATSAPP_AUTH_TOKEN=your_token
-WHATSAPP_PHONE_ID=your_phone_id
-```
+All notification services are configured via environment variables and Docker Secrets.
 
 ---
 
 ## Background Processing (Celery)
 
 Notifications are sent asynchronously to improve response times.
-
-**Example Task (`tasks.py`):**
-
-```python
-from celery import shared_task
-from .models import Notification
-
-@shared_task
-def send_notification(notification_id):
-    notification = Notification.objects.get(id=notification_id)
-    try:
-        adapter = get_adapter(notification.channel)
-        adapter.send(notification.message, notification.user)
-        notification.status = "sent"
-    except Exception as e:
-        notification.status = "failed"
-        notification.error_log = str(e)
-    notification.save()
-```
-
-Run Celery workers:
-
-```bash
-celery -A assets_backend worker -l info
-```
 
 ---
 
@@ -236,7 +171,7 @@ Use **Django’s Email Backend Debug Mode** for local testing:
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ```
 
-To test SMS and WhatsApp locally, mock provider APIs using libraries like **responses** or **requests-mock**.
+To test SMS and WhatsApp locally, mock provider APIs using **responses**.
 
 ---
 
@@ -263,9 +198,3 @@ notifications_latency_seconds{channel="whatsapp"}
 - Delivery analytics dashboard.
 - Multi-language template system.
 - AI-based message personalization.
-
----
-
-**Maintainer:** [Shahriyar (shari-ar)](https://github.com/shari-ar)  
-**Version:** 1.0.0  
-**License:** MIT
