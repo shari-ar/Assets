@@ -144,8 +144,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build images
+        env:
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.number }}
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/backend:pr-${{ github.event.number }} ./backend
-          docker build -t ghcr.io/${{ github.repository }}/frontend:pr-${{ github.event.number }} ./frontend
-          # docker push ghcr.io/${{ github.repository }}/backend:pr-${{ github.event.number }}
-          # docker push ghcr.io/${{ github.repository }}/frontend:pr-${{ github.event.number }}
+          repo_lc="${REPOSITORY,,}"
+          docker build -t "ghcr.io/${repo_lc}/backend:pr-${PR_NUMBER}" ./backend
+          docker build -t "ghcr.io/${repo_lc}/frontend:pr-${PR_NUMBER}" ./frontend
+          # docker push "ghcr.io/${repo_lc}/backend:pr-${PR_NUMBER}"
+          # docker push "ghcr.io/${repo_lc}/frontend:pr-${PR_NUMBER}"

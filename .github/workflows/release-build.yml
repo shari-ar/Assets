@@ -62,11 +62,16 @@ jobs:
           echo "backend-tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
           echo "frontend-tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
       - name: Build and push images
+        env:
+          REPOSITORY: ${{ github.repository }}
+          BACKEND_TAG: ${{ steps.meta.outputs.backend-tag }}
+          FRONTEND_TAG: ${{ steps.meta.outputs.frontend-tag }}
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/backend:${{ steps.meta.outputs.backend-tag }} ./backend
-          docker build -t ghcr.io/${{ github.repository }}/frontend:${{ steps.meta.outputs.frontend-tag }} ./frontend
-          # docker push ghcr.io/${{ github.repository }}/backend:${{ steps.meta.outputs.backend-tag }}
-          # docker push ghcr.io/${{ github.repository }}/frontend:${{ steps.meta.outputs.frontend-tag }}
+          repo_lc="${REPOSITORY,,}"
+          docker build -t "ghcr.io/${repo_lc}/backend:${BACKEND_TAG}" ./backend
+          docker build -t "ghcr.io/${repo_lc}/frontend:${FRONTEND_TAG}" ./frontend
+          # docker push "ghcr.io/${repo_lc}/backend:${BACKEND_TAG}"
+          # docker push "ghcr.io/${repo_lc}/frontend:${FRONTEND_TAG}"
 
   deploy-staging:
     runs-on: ubuntu-latest
