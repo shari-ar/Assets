@@ -17,10 +17,10 @@ The **Assets** platform implements a robust **role-based access control (RBAC)**
 
 ## Core Roles
 
-| Role      | Description                                  | Typical Actions                                                  |
-| --------- | -------------------------------------------- | ---------------------------------------------------------------- |
-| **Admin** | Platform administrator with full privileges. | Manage users and generate reports.                               |
-| **User**  | Standard authenticated user.                 | Create and manage their own tickets, use wallet, view reports.   |
+| Role      | Description                                  | Typical Actions                                                |
+| --------- | -------------------------------------------- | -------------------------------------------------------------- |
+| **Admin** | Platform administrator with full privileges. | Manage users and generate reports.                             |
+| **User**  | Standard authenticated user.                 | Create and manage their own tickets, use wallet, view reports. |
 
 ---
 
@@ -41,16 +41,16 @@ Admin
 
 | Module              | Action                   | User | Admin |
 | ------------------- | ------------------------ | ---- | ----- |
-| **Authentication**  | Register/Login           | ✅  | ✅    |
-| **Tickets**         | Create/Update/Delete Own | ✅  | ✅    |
-| **Tickets**         | Read Any                 | ❌  | ✅    |
-| **Wallet**          | View/Manage Own          | ✅  | ✅    |
-| **Wallet**          | Reads Others’ Wallets    | ❌  | ✅    |
-| **Reports**         | View Personal Reports    | ✅  | ✅    |
-| **Reports**         | Access All Reports       | ❌  | ✅    |
-| **Notifications**   | Receive                  | ✅  | ✅    |
-| **Notifications**   | Broadcast                | ❌  | ✅    |
-| **Admin Dashboard** | Access                   | ❌  | ✅    |
+| **Authentication**  | Register/Login           | ✅   | ✅    |
+| **Tickets**         | Create/Update/Delete Own | ✅   | ✅    |
+| **Tickets**         | Read Any                 | ❌   | ✅    |
+| **Wallet**          | View/Manage Own          | ✅   | ✅    |
+| **Wallet**          | Reads Others’ Wallets    | ❌   | ✅    |
+| **Reports**         | View Personal Reports    | ✅   | ✅    |
+| **Reports**         | Access All Reports       | ❌   | ✅    |
+| **Notifications**   | Receive                  | ✅   | ✅    |
+| **Notifications**   | Broadcast                | ❌   | ✅    |
+| **Admin Dashboard** | Access                   | ❌   | ✅    |
 
 ✅ = Allowed | ❌ = Restricted
 
@@ -60,10 +60,10 @@ Admin
 
 All API routes define permission decorators or dependencies.
 
-| Decorator                 | Description                               |
-| ------------------------- | ----------------------------------------- |
-| `@login_required`         | Requires authentication.                  |
-| `@admin_required`         | Restricts access to admin-only endpoints. |
+| Decorator         | Description                               |
+| ----------------- | ----------------------------------------- |
+| `@login_required` | Requires authentication.                  |
+| `@admin_required` | Restricts access to admin-only endpoints. |
 
 ---
 

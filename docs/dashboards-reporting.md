@@ -44,12 +44,12 @@ Dashboards pull data from multiple backend services and tables:
 The backend reporting engine is implemented under the `reports` app.
 
 **Key Modules:**
-| Module           | Description                                                      |
+| Module | Description |
 |------------------|------------------------------------------------------------------|
-| `models.py`      | Defines the `Report` and `AnalyticsRecord` models.               |
-| `tasks.py`       | Handles nightly aggregation jobs.                                |
-| `views.py`       | Exposes `/reports/overview/` and `/reports/metrics/` endpoints.  |
-| `serializers.py` | Converts report objects to JSON format for the frontend.         |
+| `models.py` | Defines the `Report` and `AnalyticsRecord` models. |
+| `tasks.py` | Handles nightly aggregation jobs. |
+| `views.py` | Exposes `/reports/overview/` and `/reports/metrics/` endpoints. |
+| `serializers.py` | Converts report objects to JSON format for the frontend. |
 
 ---
 
