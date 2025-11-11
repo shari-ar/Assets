@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardBody, Chip } from "@nextui-org/react";
+
 import { AppButton } from "@/components/ui/AppButton";
 import { useBackendHealth } from "@/hooks/useBackendHealth";
 import { heroGradient } from "@/styles/theme";
@@ -16,14 +17,9 @@ export default function HomePage() {
       ? "danger"
       : "default";
 
-import { heroGradient } from "@/styles/theme";
-
-export default function HomePage() {
   return (
     <section className="flex flex-col gap-12">
-      <div
-        className={`glass-panel mx-auto flex max-w-4xl flex-col items-center gap-6 px-8 py-14 text-center bg-gradient-to-br ${heroGradient}`}
-      >
+      <div className={`glass-panel mx-auto flex max-w-4xl flex-col items-center gap-6 px-8 py-14 text-center bg-gradient-to-br ${heroGradient}`}>
         <Chip color="primary" variant="flat">
           Activate Architecture Shell
         </Chip>
