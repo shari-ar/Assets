@@ -1,10 +1,12 @@
 import hashlib
+from unittest.mock import patch
 
 from django.test import Client, RequestFactory, TestCase
+from django.db.utils import ProgrammingError
 from ninja.errors import HttpError
 
 from .api import admin_required, jwt_auth, user_required
-from .models import RefreshToken, User
+from .models import AuthAuditLog, RefreshToken, User
 from .tokens import create_access_token
 
 
@@ -134,3 +136,29 @@ class AuthApiTests(TestCase):
         request.user = None
         with self.assertRaises(HttpError):
             user_dependency(request)
+
+
+class AuthAuditLogTests(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(
+            email="audit@example.com",
+            password="Passw0rd!",
+            role=User.Role.ADMIN,
+            is_staff=True,
+        )
+
+    def test_log_handles_missing_table_gracefully(self) -> None:
+        with patch.object(
+            AuthAuditLog.objects,
+            "create",
+            side_effect=ProgrammingError("no such table: assets_auth_authauditlog"),
+        ), self.assertLogs("apps.auth.models", level="WARNING") as logs:
+            result = AuthAuditLog.log(
+                user=self.user,
+                email=self.user.email,
+                action=AuthAuditLog.Action.LOGIN,
+                successful=True,
+            )
+
+        self.assertIsNone(result)
+        self.assertTrue(any("Skipping authentication audit log write" in msg for msg in logs.output))
