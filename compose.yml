@@ -27,9 +27,9 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     volumes:
       - ./backend:/app
-    command: ["/bin/sh", "-c", "echo Backend container placeholder; tail -f /dev/null"]
-    # Once the Django project exists, replace with gunicorn:
-    # command: ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    # For production use gunicorn once the app is ready:
+    # command: ["gunicorn", "assets_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
     ports:
       - "8000:8000"
     depends_on:
@@ -46,7 +46,9 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     volumes:
       - ./frontend:/app
-    command: ["/bin/sh", "-c", "echo Frontend container placeholder; tail -f /dev/null"]
+    command: ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "3000"]
+    # For production use the Next.js start command:
+    # command: ["npm", "run", "start"]
     ports:
       - "3000:3000"
     depends_on:
