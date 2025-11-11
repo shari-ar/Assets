@@ -14,6 +14,30 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-placeholder")
 
 ALLOWED_HOSTS: list[str] = ["*"]
 
+
+def _csv_env(name: str, default: list[str]) -> list[str]:
+    value = os.getenv(name, "")
+    if not value:
+        return default
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+CORS_ALLOWED_ORIGINS = _csv_env(
+    "CORS_ALLOWED_ORIGINS",
+    [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost",
+        "http://127.0.0.1",
+    ],
+)
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = _csv_env(
+    "CSRF_TRUSTED_ORIGINS",
+    [origin for origin in CORS_ALLOWED_ORIGINS if origin.startswith("http")],
+)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -21,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "apps.auth.apps.AuthConfig",
     "apps.wallet.apps.WalletConfig",
     "apps.tickets.apps.TicketsConfig",
@@ -31,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

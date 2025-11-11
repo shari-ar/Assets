@@ -3,6 +3,19 @@
 import Link from "next/link";
 import { Card, CardBody, Chip } from "@nextui-org/react";
 import { AppButton } from "@/components/ui/AppButton";
+import { useBackendHealth } from "@/hooks/useBackendHealth";
+import { heroGradient } from "@/styles/theme";
+
+export default function HomePage() {
+  const { status, lastCheckedLabel, error, isChecking, refresh, isHealthy } =
+    useBackendHealth(20000);
+
+  const statusTone = isHealthy
+    ? "success"
+    : status === "error" && !isChecking
+      ? "danger"
+      : "default";
+
 import { heroGradient } from "@/styles/theme";
 
 export default function HomePage() {
@@ -29,6 +42,40 @@ export default function HomePage() {
           </AppButton>
         </div>
       </div>
+      <Card className="mx-auto w-full max-w-3xl border border-default-200/60 bg-background/80">
+        <CardBody className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col items-start gap-1 text-left">
+            <p className="text-xs font-medium uppercase tracking-wide text-default-500">
+              Backend health
+            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <Chip color={statusTone} variant="flat">
+                {isChecking
+                  ? "Checking"
+                  : isHealthy
+                    ? "Healthy"
+                    : status === "error"
+                      ? "Unavailable"
+                      : "Checking"}
+              </Chip>
+              {lastCheckedLabel ? (
+                <span className="text-xs text-default-400">Last checked {lastCheckedLabel}</span>
+              ) : null}
+            </div>
+            {error ? <p className="text-xs text-danger">{error}</p> : null}
+          </div>
+          <AppButton
+            size="sm"
+            variant="bordered"
+            isLoading={isChecking}
+            onPress={() => {
+              void refresh();
+            }}
+          >
+            Refresh status
+          </AppButton>
+        </CardBody>
+      </Card>
       <div className="grid gap-6 md:grid-cols-3">
         {[
           {
