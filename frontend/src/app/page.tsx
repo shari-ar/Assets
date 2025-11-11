@@ -16,6 +16,9 @@ export default function HomePage() {
       ? "danger"
       : "default";
 
+import { heroGradient } from "@/styles/theme";
+
+export default function HomePage() {
   return (
     <section className="flex flex-col gap-12">
       <div
