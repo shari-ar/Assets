@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import logging
 import secrets
 from datetime import timedelta
 from typing import Any
@@ -10,7 +11,11 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
+from django.db.utils import OperationalError, ProgrammingError
 from django.utils import timezone
+
+
+logger = logging.getLogger(__name__)
 
 
 class UserManager(BaseUserManager):
@@ -173,13 +178,19 @@ class AuthAuditLog(models.Model):
         ip_address: str = "",
         user_agent: str = "",
         metadata: dict[str, Any] | None = None,
-    ) -> "AuthAuditLog":
-        return cls.objects.create(
-            user=user,
-            email=email,
-            action=action,
-            successful=successful,
-            ip_address=ip_address[:64],
-            user_agent=user_agent[:500],
-            metadata=metadata or {},
-        )
+    ) -> "AuthAuditLog | None":
+        try:
+            return cls.objects.create(
+                user=user,
+                email=email,
+                action=action,
+                successful=successful,
+                ip_address=ip_address[:64],
+                user_agent=user_agent[:500],
+                metadata=metadata or {},
+            )
+        except (ProgrammingError, OperationalError):
+            logger.warning(
+                "Skipping authentication audit log write because the database table is missing."
+            )
+            return None
