@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AuthForm } from "@/components/forms/AuthForm";
 import { register as registerUser } from "@/lib/auth";
 import { Card } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 type RegisterFormValues = {
   fullName: string;
@@ -22,6 +23,8 @@ const registerFields: Array<{
 ];
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 md:flex-row">
       <Card className="flex-1 border border-default-200 bg-background/80 p-6">
@@ -38,6 +41,7 @@ export default function RegisterPage() {
             </>
           }
           onSubmit={registerUser}
+          onSuccess={() => router.replace("/dashboard")}
         />
       </Card>
       <div className="glass-panel flex flex-1 flex-col gap-4 p-8">

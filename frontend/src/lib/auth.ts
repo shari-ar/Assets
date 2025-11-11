@@ -27,6 +27,7 @@ export async function register(payload: {
   password: string;
 }): Promise<void> {
   await api.post("/auth/register", payload);
+  await login({ email: payload.email, password: payload.password });
 }
 
 export async function logout(): Promise<void> {

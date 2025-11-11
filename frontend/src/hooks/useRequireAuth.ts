@@ -1,0 +1,47 @@
+"use client";
+
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+
+import { useAuthStore } from "@/hooks/useAuth";
+import type { AuthUser } from "@/types/auth";
+
+interface RequireAuthOptions {
+  roles?: Array<AuthUser["role"]>;
+  redirectTo?: string;
+}
+
+export function useRequireAuth({ roles, redirectTo = "/auth/login" }: RequireAuthOptions = {}) {
+  const router = useRouter();
+  const { user, initialized } = useAuthStore((state) => ({
+    user: state.user,
+    initialized: state.initialized,
+  }));
+
+  const rolesKey = useMemo(() => (roles ? [...roles].sort().join("|") : ""), [roles]);
+  const normalizedRoles = useMemo(
+    () => (rolesKey ? (rolesKey.split("|") as Array<AuthUser["role"]>) : []),
+    [rolesKey],
+  );
+
+  useEffect(() => {
+    if (!initialized) {
+      return;
+    }
+
+    if (!user) {
+      router.replace(redirectTo);
+      return;
+    }
+
+    if (normalizedRoles.length > 0 && !normalizedRoles.includes(user.role)) {
+      router.replace("/dashboard");
+    }
+  }, [initialized, normalizedRoles, redirectTo, router, user]);
+
+  const isAuthorized = Boolean(
+    user && (normalizedRoles.length === 0 || normalizedRoles.includes(user.role)),
+  );
+
+  return { user, initialized, isAuthorized };
+}

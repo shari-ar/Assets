@@ -5,6 +5,7 @@ import { useForm, type Path } from "react-hook-form";
 import { Input, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { AppButton } from "@/components/ui/AppButton";
 import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 type FieldConfig<TField extends string> = {
   name: TField;
@@ -18,6 +19,7 @@ interface AuthFormProps<TValues extends Record<string, string>> {
   fields: Array<FieldConfig<keyof TValues & string>>;
   submitLabel?: string;
   footer?: ReactNode;
+  onSuccess?: () => void;
 }
 
 export function AuthForm<TValues extends Record<string, string>>({
@@ -26,6 +28,7 @@ export function AuthForm<TValues extends Record<string, string>>({
   fields,
   submitLabel = "Continue",
   footer,
+  onSuccess,
 }: AuthFormProps<TValues>) {
   const {
     register,
@@ -37,8 +40,26 @@ export function AuthForm<TValues extends Record<string, string>>({
     try {
       await onSubmit(values);
       toast.success(`${title} successful`);
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+      onSuccess?.();
+    } catch (error) {
+      let message = "Something went wrong. Please try again.";
+      if (isAxiosError(error)) {
+        const data = error.response?.data;
+        if (typeof data === "string" && data.trim().length > 0) {
+          message = data;
+        } else if (data && typeof data === "object") {
+          const values = Object.values(data as Record<string, unknown>);
+          const extracted = values
+            .flatMap((value) => (Array.isArray(value) ? value : [value]))
+            .filter((value): value is string => typeof value === "string");
+          if (extracted.length > 0) {
+            message = extracted.join(" ");
+          }
+        } else if (error.message) {
+          message = error.message;
+        }
+      }
+      toast.error(message);
     }
   });
 

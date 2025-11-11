@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "apps.notifications.apps.NotificationsConfig",
 ]
 
+AUTH_USER_MODEL = "assets_auth.User"
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -123,3 +125,17 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return int(os.getenv(name, default))
+    except ValueError:
+        return default
+
+
+ACCESS_TOKEN_LIFETIME_MINUTES = _env_int("ACCESS_TOKEN_LIFETIME_MINUTES", 15)
+REFRESH_TOKEN_LIFETIME_DAYS = _env_int("REFRESH_TOKEN_LIFETIME_DAYS", 14)
+
+AUTH_COOKIE_SECURE = os.getenv("AUTH_COOKIE_SECURE", "1" if not DEBUG else "0") == "1"
+AUTH_COOKIE_SAMESITE = os.getenv("AUTH_COOKIE_SAMESITE", "Lax")

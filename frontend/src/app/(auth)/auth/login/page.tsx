@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AuthForm } from "@/components/forms/AuthForm";
 import { login } from "@/lib/auth";
 import { Card } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 type LoginFormValues = {
   email: string;
@@ -20,6 +21,8 @@ const loginFields: Array<{
 ];
 
 export default function LoginPage() {
+  const router = useRouter();
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 md:flex-row">
       <div className="glass-panel flex flex-1 flex-col gap-4 p-8">
@@ -47,6 +50,7 @@ export default function LoginPage() {
             </>
           }
           onSubmit={login}
+          onSuccess={() => router.replace("/dashboard")}
         />
       </Card>
     </div>
