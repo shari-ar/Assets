@@ -1,7 +1,7 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchCurrentUser } from "@/lib/auth";
@@ -19,6 +19,14 @@ export function Providers({ children }: ProvidersProps) {
       return;
     }
 
+  const hasFetchedRef = useRef(false);
+
+  useEffect(() => {
+    if (hasFetchedRef.current) {
+      return;
+    }
+
+    hasFetchedRef.current = true;
     void fetchCurrentUser();
   }, [initialized]);
 
