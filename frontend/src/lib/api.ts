@@ -40,6 +40,32 @@ function shouldAttemptRefresh(url?: string) {
   return !isAuthPublicEndpoint(url);
 }
 
+function redirectToLogin() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const { pathname } = window.location;
+  if (isAuthPublicRoute(pathname)) {
+    return;
+  }
+
+  window.location.href = "/auth/login";
+}
+
+function redirectToLogin() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const { pathname } = window.location;
+  if (pathname === "/auth/login") {
+    return;
+  }
+
+  window.location.href = "/auth/login";
+}
+
 const redirectToLoginIfNeeded = () => {
   if (typeof window === "undefined") {
     return;
@@ -81,7 +107,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         useAuthStore.getState().clearUser();
         flushQueue(false);
-        redirectToLoginIfNeeded();
+        redirectToLogin();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -90,7 +116,7 @@ api.interceptors.response.use(
 
     if (response?.status === 401) {
       useAuthStore.getState().clearUser();
-      redirectToLoginIfNeeded();
+      redirectToLogin();
     }
     return Promise.reject(error);
   },
