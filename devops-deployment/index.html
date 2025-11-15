@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🧠 DevOps & Deployment - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter active" data-path="devops-deployment/">
+<a href="./">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="devops-deployment">DevOps &amp; Deployment</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> project uses a <strong>monorepo</strong> architecture to manage both backend (Django) and frontend (Next.js) applications. This guide outlines the CI/CD workflows, environment configurations, Docker setup, and deployment strategies for production and staging environments.</p>
+<hr />
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Streamline deployment through automation.</li>
+<li>Maintain consistency between development, staging, and production.</li>
+<li>Ensure scalability, observability, and fault tolerance.</li>
+<li>Simplify developer onboarding via Dockerized environments.</li>
+</ul>
+<hr />
+<h2 id="repository-structure">Repository Structure</h2>
+<pre><code>Assets/
+├── backend/                 # Django + Django Ninja API
+├── frontend/                # Next.js + HeroUI app
+├── docs/                    # Documentation for contributors
+├── .github/workflows/       # CI/CD pipelines
+├── compose.yml              # Multi-service orchestration
+├── .env.example             # Sample environment file
+└── Makefile                 # Common build and test commands
+</code></pre>
+<hr />
+<h2 id="cicd-workflow">CI/CD Workflow</h2>
+<p>The project uses <strong>GitHub Actions</strong> for automated testing, linting, building, and deployment.</p>
+<h3 id="workflow-overview">Workflow Overview</h3>
+<ol>
+<li><strong>Pull Request Validation</strong></li>
+<li>Lint backend and frontend code.</li>
+<li>Run unit and integration tests.</li>
+<li><strong>Build &amp; Push Docker Images</strong></li>
+<li>Tag and push images to GHCR.</li>
+<li><strong>Deploy to Production</strong></li>
+<li>Trigger remote deployment.</li>
+</ol>
+<hr />
+<h2 id="environment-configuration">Environment Configuration</h2>
+<p>All environment variables are centralized in the <code>.env</code> file.</p>
+<hr />
+<h2 id="docker-setup">Docker Setup</h2>
+<p>Both backend and frontend are containerized for consistent environments.</p>
+<hr />
+<h2 id="local-development">Local Development</h2>
+<h3 id="setup">Setup</h3>
+<pre><code class="language-bash">git clone https://github.com/shari-ar/Assets.git
+cd Assets
+cp .env.example .env
+docker-compose up --build
+</code></pre>
+<p>Backend available at → <code>http://localhost:8000</code><br />
+Frontend available at → <code>http://localhost:3000</code></p>
+<h3 id="common-commands">Common Commands</h3>
+<pre><code class="language-bash">make test         # Run tests
+make format       # Lint and format code
+make migrate      # Run Django migrations
+make seed         # Load seed data
+</code></pre>
+<hr />
+<h2 id="deployment-targets">Deployment Targets</h2>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Platform</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Staging</strong></td>
+<td>Local Docker Setup</td>
+<td>Preview deployments for QA</td>
+</tr>
+<tr>
+<td><strong>Production</strong></td>
+<td>VPS</td>
+<td>Available Online</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="monitoring-logging">Monitoring &amp; Logging</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sentry</strong></td>
+<td>Application error tracking</td>
+</tr>
+<tr>
+<td><strong>Prometheus</strong></td>
+<td>Metrics collection</td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td>Visualization and alerting</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="backup-recovery">Backup &amp; Recovery</h2>
+<ul>
+<li>Automated PostgreSQL backups using <code>pg_dump</code>.</li>
+<li>Daily snapshot retention policy for 30 days.</li>
+<li>Restore tested quarterly via CI scripts.</li>
+</ul>
+<p><strong>Example Backup Script:</strong></p>
+<pre><code class="language-bash">pg_dump $DATABASE_URL &gt; backup_$(date +%F).sql
+</code></pre>
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<ul>
+<li>Use <strong>Nginx</strong> for reverse proxy.</li>
+<li>Use <strong>Docker secrets</strong> for credentials instead of plain <code>.env</code>.</li>
+<li>Enforce least privilege on database users.</li>
+<li>Enable <strong>firewall rules</strong> and <strong>VPC isolation</strong>.</li>
+<li>Use <strong>fail2ban</strong> or <strong>UFW</strong> for SSH protection.</li>
+<li>Auto-renew SSL certificates via <strong>Let’s Encrypt</strong>.</li>
+</ul>
+<hr />
+<h2 id="future-improvements">Future Improvements</h2>
+<ul>
+<li>Horizontal scaling via Kubernetes.</li>
+<li>Zero-downtime migrations.</li>
+<li>Canary deployments and rollback automation.</li>
+<li>Terraform for infrastructure as code (IaC).</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

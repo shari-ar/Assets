@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🧮 Database Schema - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter active" data-path="database-schema/">
+<a href="./">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="database-schema-documentation">Database Schema Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>This document defines the <strong>database schema</strong> for the <strong>Assets</strong> platform. It outlines all major tables, relationships, constraints, and indexing strategies. The platform uses <strong>PostgreSQL</strong> as the relational database engine, ensuring ACID compliance, foreign key integrity, and high scalability.</p>
+<hr />
+<h2 id="core-design-principles">Core Design Principles</h2>
+<ul>
+<li><strong>Normalization:</strong> Third Normal Form (3NF) to reduce redundancy.</li>
+<li><strong>Auditability:</strong> All wallet and ticket operations are logged.</li>
+<li><strong>Security:</strong> Role-based access and Row-Level Security (RLS).</li>
+<li><strong>Extensibility:</strong> Modular tables to support new features such as asset categories or payment gateways.</li>
+<li><strong>Integrity:</strong> Foreign keys, constraints, and cascade rules ensure consistent data.</li>
+</ul>
+<hr />
+<h2 id="entity-relationship-diagram-erd">Entity Relationship Diagram (ERD)</h2>
+<pre><code>   ┌────────────┐     ┌──────────────┐          ┌───────────────┐
+   │   users    │──┐  │   tickets    │──┐       │   payments    │
+   └────────────┘  │  └──────────────┘  │       └───────────────┘
+         │         │        │           │              │
+         ▼         ▼        ▼           ▼              ▼
+┌────────────┐  ┌──────────────┐  ┌────────────┐  ┌──────────────┐
+│  wallets   │  │ ledger_entry │  │  reports   │  │ notifications│
+└────────────┘  └──────────────┘  └────────────┘  └──────────────┘
+</code></pre>
+<hr />
+<h2 id="table-definitions">Table Definitions</h2>
+<h3 id="1-users">1. <code>users</code></h3>
+<p>Stores registered user accounts and identity provider metadata.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Constraints</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+<td>Unique user ID</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>VARCHAR(255)</td>
+<td>UNIQUE, NOT NULL</td>
+<td>Primary user identifier</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>VARCHAR(255)</td>
+<td>NULLABLE</td>
+<td>Encrypted password (for non-SSO users)</td>
+</tr>
+<tr>
+<td><code>first_name</code></td>
+<td>VARCHAR(100)</td>
+<td></td>
+<td>User’s first name</td>
+</tr>
+<tr>
+<td><code>last_name</code></td>
+<td>VARCHAR(100)</td>
+<td></td>
+<td>User’s last name</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>ENUM('admin','user')</td>
+<td>DEFAULT 'user'</td>
+<td>Role-based permissions</td>
+</tr>
+<tr>
+<td><code>sso_provider</code></td>
+<td>VARCHAR(50)</td>
+<td></td>
+<td>OAuth2 provider name</td>
+</tr>
+<tr>
+<td><code>sso_sub</code></td>
+<td>VARCHAR(255)</td>
+<td></td>
+<td>External provider subject ID</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Creation timestamp</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Last profile update</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_users_email</code> for quick lookups.</li>
+<li>Unique composite index on <code>(sso_provider, sso_sub)</code> for federated users.</li>
+</ul>
+<hr />
+<h3 id="2-wallets">2. <code>wallets</code></h3>
+<p>Each user owns one wallet, holding their balance in IRR (Rials).</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Constraints</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+<td>Wallet ID</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>INT</td>
+<td>FK → users.id</td>
+<td>Wallet owner</td>
+</tr>
+<tr>
+<td><code>balance</code></td>
+<td>NUMERIC(18,2)</td>
+<td>DEFAULT 0</td>
+<td>Current balance</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>VARCHAR(10)</td>
+<td>DEFAULT 'IRR'</td>
+<td>Currency code</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>ENUM('active','frozen')</td>
+<td>DEFAULT 'active'</td>
+<td>Wallet state</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Creation timestamp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>One wallet per user (UNIQUE <code>user_id</code>).</li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_wallets_user</code> for fast joins.</li>
+</ul>
+<hr />
+<h3 id="3-ledger_entries">3. <code>ledger_entries</code></h3>
+<p>Records every financial transaction for audit purposes (double-entry system).</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Constraints</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+<td>Ledger record ID</td>
+</tr>
+<tr>
+<td><code>wallet_id</code></td>
+<td>INT</td>
+<td>FK → wallets.id</td>
+<td>Related wallet</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>ENUM('credit','debit')</td>
+<td></td>
+<td>Transaction direction</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>NUMERIC(18,2)</td>
+<td>CHECK (amount &gt; 0)</td>
+<td>Transaction amount</td>
+</tr>
+<tr>
+<td><code>ref</code></td>
+<td>VARCHAR(64)</td>
+<td></td>
+<td>External reference (Zarinpal Ref ID)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>TEXT</td>
+<td></td>
+<td>Human-readable info</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Time of entry</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td>INT</td>
+<td>FK → users.id</td>
+<td>Who triggered it</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_ledger_wallet</code> on <code>wallet_id</code>.</li>
+<li><code>idx_ledger_ref</code> for reconciliation with payment gateway.</li>
+</ul>
+<hr />
+<h3 id="4-tickets">4. <code>tickets</code></h3>
+<p>Handles asset lending requests and agreements.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Constraints</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+<td>Ticket ID</td>
+</tr>
+<tr>
+<td><code>asset_name</code></td>
+<td>VARCHAR(255)</td>
+<td>NOT NULL</td>
+<td>Asset name or description</td>
+</tr>
+<tr>
+<td><code>borrower_id</code></td>
+<td>INT</td>
+<td>FK → users.id</td>
+<td>Borrower user</td>
+</tr>
+<tr>
+<td><code>lender_id</code></td>
+<td>INT</td>
+<td>FK → users.id</td>
+<td>Lender user</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>NUMERIC(18,2)</td>
+<td></td>
+<td>Agreed rental price</td>
+</tr>
+<tr>
+<td><code>duration_days</code></td>
+<td>INT</td>
+<td></td>
+<td>Duration of lending</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>ENUM('pending','accepted','active','completed','cancelled')</td>
+<td>DEFAULT 'pending'</td>
+<td>Ticket state</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Creation timestamp</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Status change timestamp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_tickets_borrower_lender</code></li>
+<li><code>idx_tickets_status</code> for admin dashboards.</li>
+</ul>
+<hr />
+<h3 id="5-payments">5. <code>payments</code></h3>
+<p>Tracks transactions made through Zarinpal.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Constraints</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+<td>Payment record ID</td>
+</tr>
+<tr>
+<td><code>ticket_id</code></td>
+<td>INT</td>
+<td>FK → tickets.id</td>
+<td>Related ticket</td>
+</tr>
+<tr>
+<td><code>authority</code></td>
+<td>VARCHAR(64)</td>
+<td>UNIQUE</td>
+<td>Zarinpal authority token</td>
+</tr>
+<tr>
+<td><code>ref_id</code></td>
+<td>BIGINT</td>
+<td></td>
+<td>Zarinpal reference ID</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>NUMERIC(18,2)</td>
+<td></td>
+<td>Payment amount</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>ENUM('initiated','verified','failed')</td>
+<td>DEFAULT 'initiated'</td>
+<td>Payment state</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+<td>Payment start time</td>
+</tr>
+<tr>
+<td><code>verified_at</code></td>
+<td>TIMESTAMP</td>
+<td></td>
+<td>Verification timestamp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_payments_authority</code> and <code>idx_payments_ref</code>.</li>
+</ul>
+<hr />
+<h3 id="6-reports">6. <code>reports</code></h3>
+<p>Stores aggregated data for dashboards and analytics.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+</tr>
+<tr>
+<td><code>report_date</code></td>
+<td>DATE</td>
+<td>Date of aggregation</td>
+</tr>
+<tr>
+<td><code>total_users</code></td>
+<td>INT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>total_tickets</code></td>
+<td>INT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>active_loans</code></td>
+<td>INT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>total_volume</code></td>
+<td>NUMERIC(18,2)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_reports_date</code> for quick historical queries.</li>
+</ul>
+<hr />
+<h3 id="7-notifications">7. <code>notifications</code></h3>
+<p>Tracks messages sent via SMS, WhatsApp, or email.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>PK</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>INT</td>
+<td>FK → users.id</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td>ENUM('sms','whatsapp','email')</td>
+<td></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>TEXT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>ENUM('queued','sent','failed')</td>
+<td>DEFAULT 'queued'</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>DEFAULT now()</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="relationships-summary">Relationships Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users</code> → <code>wallets</code></td>
+<td>One-to-One</td>
+<td>Each user has one wallet</td>
+</tr>
+<tr>
+<td><code>users</code> → <code>tickets</code></td>
+<td>One-to-Many</td>
+<td>Users can create multiple tickets</td>
+</tr>
+<tr>
+<td><code>wallets</code> → <code>ledger_entries</code></td>
+<td>One-to-Many</td>
+<td>Each wallet has multiple transactions</td>
+</tr>
+<tr>
+<td><code>tickets</code> → <code>payments</code></td>
+<td>One-to-One</td>
+<td>Each ticket has one payment record</td>
+</tr>
+<tr>
+<td><code>users</code> → <code>notifications</code></td>
+<td>One-to-Many</td>
+<td>Users receive multiple notifications</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="database-management-notes">Database Management Notes</h2>
+<ul>
+<li>Migrations handled via <strong>Django ORM</strong> and <code>manage.py migrate</code>.</li>
+<li>Backup and restore via <code>pg_dump</code> and <code>pg_restore</code>.</li>
+<li>Schema versioning via Django migration history.</li>
+<li>Foreign key constraints use <code>ON DELETE CASCADE</code> for dependent records.</li>
+<li>Regular vacuum and analyze scheduled for performance optimization.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

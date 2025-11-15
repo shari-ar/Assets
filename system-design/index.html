@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🧱 System Design Spec - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter active" data-path="system-design/">
+<a href="./">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="system-design-specification">System Design Specification</h1>
+<h2 id="1-purpose">1. Purpose</h2>
+<p>This document defines the <strong>system-level design</strong> for the <em>Assets</em> platform — a peer-to-peer asset lending system. It describes the overall architecture, functional modules, interactions, and scalability.</p>
+<hr />
+<h2 id="2-goals-and-principles">2. Goals and Principles</h2>
+<ul>
+<li><strong>Security first:</strong> Encrypted data flows, strict role boundaries, and auditable transactions.</li>
+<li><strong>Extensibility:</strong> Modular services and replaceable adapters for payments, storage, and notifications.</li>
+<li><strong>Performance:</strong> Efficient API responses and database queries under concurrent load.</li>
+<li><strong>Reliability:</strong> Atomic transactions and safe wallet ledger operations.</li>
+</ul>
+<hr />
+<h2 id="3-high-level-overview">3. High-Level Overview</h2>
+<p>The system consists of five major components:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Next.js + HeroUI web client for users and admins. Handles authentication, dashboards, and wallet/ticket interactions.</td>
+</tr>
+<tr>
+<td><strong>API Gateway</strong></td>
+<td>Django Ninja REST API providing all endpoints; handles auth, validation, and service routing.</td>
+</tr>
+<tr>
+<td><strong>Core Services</strong></td>
+<td>Logical modules: <code>auth</code>, <code>wallet</code>, <code>tickets</code>, <code>reports</code>. Each has its own models, serializers, and business logic.</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>PostgreSQL with normalized schema and foreign keys. Enables strong consistency and auditability.</td>
+</tr>
+<tr>
+<td><strong>Integrations</strong></td>
+<td>Zarinpal for payments, SMS/WhatsApp for notifications, optional email services (Postmark/SendGrid).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-functional-flow">4. Functional Flow</h2>
+<h3 id="41-authentication-and-access">4.1 Authentication and Access</h3>
+<ol>
+<li>User logs in via <strong>OAuth 2.0</strong> (SSO) or email/password.</li>
+<li>Backend issues a <strong>JWT</strong> stored in an <code>HttpOnly</code> cookie.</li>
+<li>Frontend attaches the token to future requests.</li>
+<li>Role-based middleware enforces access (admin vs user).</li>
+</ol>
+<h3 id="42-lending-workflow">4.2 Lending Workflow</h3>
+<ol>
+<li><strong>Borrower</strong> submits a ticket specifying asset, duration, and price.</li>
+<li><strong>Lender</strong> receives a notification and accepts or declines.</li>
+<li>Once accepted, funds are reserved in borrower’s wallet.</li>
+<li>Payment captured through <strong>Zarinpal</strong> and ledger entries created.</li>
+<li>Ticket status transitions: <em>pending → accepted → active → completed</em>.</li>
+<li>Post-loan, funds are settled and transaction logs updated.</li>
+</ol>
+<h3 id="43-wallet-and-payments">4.3 Wallet and Payments</h3>
+<ul>
+<li>Each user has one wallet in PostgreSQL.</li>
+<li><strong>Double-entry ledger</strong> ensures all debits and credits are balanced.</li>
+<li>External payments handled by <strong>Zarinpal adapter</strong>, abstracted for future providers.</li>
+<li>Audit trail captures all wallet operations.</li>
+</ul>
+<hr />
+<h2 id="5-data-flow-diagram">5. Data Flow Diagram</h2>
+<pre><code>+-----------+        +-------------+        +---------------+        +-------------+
+|  Browser  | &lt;----&gt; | API Gateway | &lt;----&gt; | Core Services | &lt;----&gt; | PostgreSQL  |
+| (Next.js) |        |  (Django)   |        | (Auth,Wallet, |        | (RLS, Logs) |
+|           |        |             |        | Tickets...)   |        |             |
++-----------+        +-------------+        +---------------+        +-------------+
+|           |        |             |
++--&gt; Zarinpal, SMS,
+        Email Integrations &lt;------+
+</code></pre>
+<hr />
+<h2 id="6-scalability-and-deployment">6. Scalability and Deployment</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Monorepo</strong></td>
+<td>TurboRepo for shared code and consistent tooling.</td>
+</tr>
+<tr>
+<td><strong>API Scaling</strong></td>
+<td>Horizontal scaling behind load balancer; stateless JWT authentication.</td>
+</tr>
+<tr>
+<td><strong>DB Optimization</strong></td>
+<td>Indexing, query caching, and read replicas if necessary.</td>
+</tr>
+<tr>
+<td><strong>Caching</strong></td>
+<td>Redis for sessions, rate-limiting, and transient data.</td>
+</tr>
+<tr>
+<td><strong>Static Assets</strong></td>
+<td>Deployed via Vercel CDN for the frontend.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-security-and-compliance">7. Security and Compliance</h2>
+<ul>
+<li><strong>Transport security:</strong> SSL/TLS enforced across all endpoints.</li>
+<li><strong>Data at rest:</strong> AES-256 encryption for sensitive fields.</li>
+<li><strong>Hashing:</strong> SHA-256 for integrity; bcrypt for passwords.</li>
+<li><strong>Audit logging:</strong> Immutable logs for all wallet and admin actions.</li>
+<li><strong>Compliance readiness:</strong> GDPR and data deletion policies.</li>
+</ul>
+<hr />
+<h2 id="8-testing-strategy">8. Testing Strategy</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backend</strong></td>
+<td>PyTest, Django Test Client</td>
+<td>Unit + integration tests for all endpoints</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Playwright</td>
+<td>UI workflows and regression checks</td>
+</tr>
+<tr>
+<td><strong>CI/CD</strong></td>
+<td>GitHub Actions</td>
+<td>Lint, test, migrate, and deploy pipelines</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-future-enhancements">9. Future Enhancements</h2>
+<ul>
+<li>Multi-tenant organizations and team lending.</li>
+<li>Asset categories with images and metadata.</li>
+<li>Smart matching between lenders and borrowers.</li>
+<li>Reporting dashboards with time-series analytics.</li>
+<li>Optional blockchain-based escrow layer.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

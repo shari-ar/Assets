@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>👥 User Roles & Permissions - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter active" data-path="user-roles-permissions/">
+<a href="./">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="user-roles-permissions">User Roles &amp; Permissions</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> platform implements a robust <strong>role-based access control (RBAC)</strong> system to ensure that users have access only to authorized functionality. This guide explains the available roles, permission hierarchies, and enforcement mechanisms within the backend and frontend applications.</p>
+<hr />
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Protect sensitive operations from unauthorized access.</li>
+<li>Simplify permission management for users and admins.</li>
+<li>Support future scalability (e.g., team-based or organization-based roles).</li>
+<li>Enforce the principle of least privilege.</li>
+</ul>
+<hr />
+<h2 id="core-roles">Core Roles</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Description</th>
+<th>Typical Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Platform administrator with full privileges.</td>
+<td>Manage users and generate reports.</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td>Standard authenticated user.</td>
+<td>Create and manage their own tickets, use wallet, view reports.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="role-hierarchy">Role Hierarchy</h2>
+<pre><code>Admin
+ └── User
+</code></pre>
+<ul>
+<li><strong>Admins</strong> have read access to all resources.</li>
+<li><strong>Users</strong> have access only to their own data and limited public endpoints.</li>
+<li>Future roles (e.g., <code>moderator</code>, <code>auditor</code>) can extend this hierarchy.</li>
+</ul>
+<hr />
+<h2 id="permission-matrix">Permission Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Action</th>
+<th>User</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Authentication</strong></td>
+<td>Register/Login</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Tickets</strong></td>
+<td>Create/Update/Delete Own</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Tickets</strong></td>
+<td>Read Any</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Wallet</strong></td>
+<td>View/Manage Own</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Wallet</strong></td>
+<td>Reads Others’ Wallets</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Reports</strong></td>
+<td>View Personal Reports</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Reports</strong></td>
+<td>Access All Reports</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Notifications</strong></td>
+<td>Receive</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Notifications</strong></td>
+<td>Broadcast</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Admin Dashboard</strong></td>
+<td>Access</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>✅ = Allowed | ❌ = Restricted</p>
+<hr />
+<h2 id="api-role-enforcement">API Role Enforcement</h2>
+<p>All API routes define permission decorators or dependencies.</p>
+<table>
+<thead>
+<tr>
+<th>Decorator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@login_required</code></td>
+<td>Requires authentication.</td>
+</tr>
+<tr>
+<td><code>@admin_required</code></td>
+<td>Restricts access to admin-only endpoints.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="admin-dashboard-permissions">Admin Dashboard Permissions</h2>
+<p>The admin dashboard is accessible only to users with the <code>admin</code> role.<br />
+It allows the following operations:</p>
+<ul>
+<li>View all users and wallets.</li>
+<li>Generate and export financial reports.</li>
+<li>Broadcast notifications to all users.</li>
+</ul>
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<ul>
+<li>Tokens include user role claims (<code>role=admin</code> or <code>role=user</code>).</li>
+<li>Backend authorization always takes precedence over frontend visibility.</li>
+<li>Sensitive endpoints enforce both <strong>JWT validation</strong> and <strong>role checks</strong>.</li>
+<li>Logs include user ID and role for every API call.</li>
+<li>Attempted access violations are recorded for audit.</li>
+</ul>
+<hr />
+<h2 id="future-role-extensions">Future Role Extensions</h2>
+<table>
+<thead>
+<tr>
+<th>Planned Role</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Moderator</strong></td>
+<td>Manage and verify asset listings.</td>
+</tr>
+<tr>
+<td><strong>Auditor</strong></td>
+<td>Read-only access to financial reports and logs.</td>
+</tr>
+<tr>
+<td><strong>Support Agent</strong></td>
+<td>Handle ticket and user inquiries via support dashboard.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="testing-permissions">Testing Permissions</h2>
+<p><strong>Example Tests:</strong></p>
+<pre><code class="language-python">def test_user_cannot_access_admin_endpoints(client, user):
+    client.force_authenticate(user)
+    response = client.get(&quot;/api/v1/admin/reports/&quot;)
+    assert response.status_code == 403
+
+def test_admin_can_access_reports(client, admin_user):
+    client.force_authenticate(admin_user)
+    response = client.get(&quot;/api/v1/admin/reports/&quot;)
+    assert response.status_code == 200
+</code></pre>
+<hr />
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Enforcement Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JWT &amp; OAuth Tokens</strong></td>
+<td>Authentication Layer</td>
+</tr>
+<tr>
+<td><strong>Role Checks</strong></td>
+<td>Middleware and Endpoints</td>
+</tr>
+<tr>
+<td><strong>UI Restrictions</strong></td>
+<td>Frontend Components</td>
+</tr>
+<tr>
+<td><strong>Database Filters</strong></td>
+<td>Querysets and Repositories</td>
+</tr>
+</tbody>
+</table>
+<p>Together, these ensure that data access is consistent, secure, and auditable across the entire system.</p>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

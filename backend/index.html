@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>⚙️ Backend - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter active" data-path="backend/">
+<a href="./">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="backend">Backend</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> backend is built using <strong>Django</strong> and <strong>Django Ninja</strong>, providing a clean, secure, and scalable API foundation. It handles authentication, wallet management, ticket operations, payment integration, and reporting. The backend adheres to RESTful principles and integrates seamlessly with the Next.js frontend.</p>
+<hr />
+<h2 id="tech-stack">Tech Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td><strong>Django</strong></td>
+<td>Core backend and ORM</td>
+</tr>
+<tr>
+<td>API Layer</td>
+<td><strong>Django Ninja 1.4.x</strong></td>
+<td>Fast type-safe REST API using Pydantic models</td>
+</tr>
+<tr>
+<td>Database</td>
+<td><strong>PostgreSQL</strong></td>
+<td>Relational storage with strong ACID guarantees</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td><strong>JWT + OAuth 2.0</strong></td>
+<td>Secure authentication and SSO support</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td><strong>PyTest, Django Test Client</strong></td>
+<td>Automated unit and integration testing</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td><strong>Redis</strong></td>
+<td>Session and rate-limit caching</td>
+</tr>
+<tr>
+<td>Task Queue</td>
+<td><strong>Celery</strong></td>
+<td>Background jobs and notifications</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td><strong>GHCR</strong></td>
+<td>Easy deployment</td>
+</tr>
+<tr>
+<td>Security</td>
+<td><strong>AES-256, SHA-256, HTTPS</strong></td>
+<td>Encryption and integrity</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="project-structure">Project Structure</h2>
+<pre><code>backend/
+├── assets_backend/
+│   ├── __init__.py
+│   ├── settings.py         # Environment configs, middleware, installed apps
+│   ├── urls.py             # Root routing configuration
+│   ├── asgi.py / wsgi.py   # Server entry points
+│   └── schema.py           # OpenAPI schema (generated by Django Ninja)
+│
+├── apps/
+│   ├── auth/               # Authentication and OAuth modules
+│   ├── wallet/             # Wallet + ledger management
+│   ├── tickets/            # Asset lending and ticket lifecycle
+│   ├── payments/           # Zarinpal integration
+│   ├── reports/            # Dashboards and analytics
+│   └── notifications/      # SMS, WhatsApp, email integration
+│
+├── tests/
+│   ├── conftest.py
+│   ├── test_auth.py
+│   ├── test_wallet.py
+│   └── test_tickets.py
+│
+├── requirements.txt
+├── manage.py
+└── Dockerfile
+</code></pre>
+<hr />
+<h2 id="app-overview">App Overview</h2>
+<table>
+<thead>
+<tr>
+<th>App</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>auth</strong></td>
+<td>Handles JWT, OAuth 2.0, and user management.</td>
+</tr>
+<tr>
+<td><strong>wallet</strong></td>
+<td>Implements user wallets and double-entry ledger system.</td>
+</tr>
+<tr>
+<td><strong>tickets</strong></td>
+<td>Core of the lending workflow (requests, approvals, lifecycle).</td>
+</tr>
+<tr>
+<td><strong>payments</strong></td>
+<td>Integrates Zarinpal payment gateway and verification.</td>
+</tr>
+<tr>
+<td><strong>reports</strong></td>
+<td>Aggregates data for dashboards and analytics.</td>
+</tr>
+<tr>
+<td><strong>notifications</strong></td>
+<td>Sends SMS/WhatsApp/email updates.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="authentication-authorization">Authentication &amp; Authorization</h2>
+<h3 id="jwt-authentication">JWT Authentication</h3>
+<ul>
+<li>Access and refresh tokens issued via <code>/auth/login/</code>.</li>
+<li>Stored securely as HttpOnly cookies.</li>
+<li>Token rotation and blacklist enabled via Django cache.</li>
+</ul>
+<h3 id="oauth-20">OAuth 2.0</h3>
+<p>Supports third-party providers such as:</p>
+<ul>
+<li>Google</li>
+<li>GitHub</li>
+<li>Auth0</li>
+</ul>
+<p>Upon OAuth login, the backend maps user profiles and issues JWTs.</p>
+<hr />
+<h2 id="wallet-system">Wallet System</h2>
+<p>Implements <strong>double-entry accounting</strong> to ensure transaction accuracy.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Debit</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deposit</td>
+<td>Bank Account</td>
+<td>Wallet</td>
+</tr>
+<tr>
+<td>Transfer</td>
+<td>Sender Wallet</td>
+<td>Receiver Wallet</td>
+</tr>
+<tr>
+<td>Payment</td>
+<td>Wallet</td>
+<td>Ticket Escrow</td>
+</tr>
+</tbody>
+</table>
+<p>All transactions are atomic and auditable via <code>ledger_entries</code>.</p>
+<p><strong>Example model snippet:</strong></p>
+<pre><code class="language-python">class LedgerEntry(models.Model):
+    wallet = models.ForeignKey(&quot;Wallet&quot;, on_delete=models.CASCADE)
+    type = models.CharField(choices=[(&quot;credit&quot;, &quot;Credit&quot;), (&quot;debit&quot;, &quot;Debit&quot;)])
+    amount = models.DecimalField(max_digits=18, decimal_places=2)
+    ref = models.CharField(max_length=64, null=True, blank=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+</code></pre>
+<hr />
+<h2 id="tickets-module">Tickets Module</h2>
+<p>Manages the end-to-end asset lending workflow.</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>Awaiting lender approval</td>
+</tr>
+<tr>
+<td><code>accepted</code></td>
+<td>Approved, awaiting payment</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>Payment verified, loan ongoing</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td>Loan duration ended successfully</td>
+</tr>
+<tr>
+<td><code>cancelled</code></td>
+<td>Request withdrawn or expired</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example API endpoints:</strong></p>
+<ul>
+<li><code>GET /tickets/</code> — List user tickets</li>
+<li><code>POST /tickets/</code> — Create new lending request</li>
+<li><code>PATCH /tickets/{id}/accept/</code> — Approve a ticket</li>
+<li><code>PATCH /tickets/{id}/complete/</code> — Mark as completed</li>
+</ul>
+<hr />
+<h2 id="payments-module-zarinpal">Payments Module (Zarinpal)</h2>
+<p>Zarinpal integration ensures secure, traceable payments.</p>
+<ul>
+<li>Initiates payment on wallet recharge.</li>
+<li>Verifies transaction via callback from Zarinpal API.</li>
+<li>Updates wallet balances upon confirmation.</li>
+</ul>
+<p><strong>Example flow:</strong></p>
+<ol>
+<li>Create payment → <code>/payments/initiate/</code></li>
+<li>Redirect user to Zarinpal gateway</li>
+<li>Verify callback → <code>/payments/verify/</code></li>
+<li>Update <code>payments</code> and <code>ledger_entries</code></li>
+</ol>
+<hr />
+<h2 id="reports-module">Reports Module</h2>
+<p>Generates real-time and aggregated insights for dashboards.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total_users</code></td>
+<td>Total registered users</td>
+</tr>
+<tr>
+<td><code>active_loans</code></td>
+<td>Currently active lending transactions</td>
+</tr>
+<tr>
+<td><code>total_volume</code></td>
+<td>Total monetary transaction volume</td>
+</tr>
+<tr>
+<td><code>daily_activity</code></td>
+<td>Recent user actions summary</td>
+</tr>
+</tbody>
+</table>
+<p>Data is aggregated nightly using a Celery task (optional).</p>
+<hr />
+<h2 id="notifications-system">Notifications System</h2>
+<p>Supports multiple channels:</p>
+<ul>
+<li><strong>SMS</strong> and <strong>WhatsApp</strong> (via API adapters)</li>
+<li><strong>Email</strong> via Postmark or SendGrid</li>
+</ul>
+<p>Each notification is logged in the database with delivery status.</p>
+<p><strong>Example schema:</strong></p>
+<pre><code class="language-python">class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    channel = models.CharField(choices=[(&quot;sms&quot;, &quot;SMS&quot;), (&quot;email&quot;, &quot;Email&quot;), (&quot;whatsapp&quot;, &quot;WhatsApp&quot;)])
+    message = models.TextField()
+    status = models.CharField(choices=[(&quot;queued&quot;, &quot;Queued&quot;), (&quot;sent&quot;, &quot;Sent&quot;), (&quot;failed&quot;, &quot;Failed&quot;)])
+    created_at = models.DateTimeField(auto_now_add=True)
+</code></pre>
+<hr />
+<h2 id="testing">Testing</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Tool</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit</td>
+<td><strong>PyTest</strong></td>
+<td>Models and utilities</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td><strong>Django Test Client</strong></td>
+<td>API endpoints</td>
+</tr>
+<tr>
+<td>E2E</td>
+<td><strong>Playwright</strong> (Frontend)</td>
+<td>Combined frontend-backend flows</td>
+</tr>
+</tbody>
+</table>
+<p>Example command:</p>
+<pre><code class="language-bash">pytest -v --maxfail=1 --disable-warnings
+</code></pre>
+<hr />
+<h2 id="deployment">Deployment</h2>
+<h3 id="environment-variables">Environment Variables</h3>
+<pre><code>SECRET_KEY=your_django_secret
+DATABASE_URL=postgresql://user:pass@localhost:5432/assets
+ZARINPAL_MERCHANT_ID=your_merchant_id
+ZARINPAL_CALLBACK_URL=https://api.assets.example.com/api/v1/payments/verify/
+JWT_SECRET=supersecret
+DEBUG=False
+ALLOWED_HOSTS=assets.example.com
+</code></pre>
+<h3 id="docker-setup">Docker Setup</h3>
+<pre><code class="language-bash">docker build -t assets-backend .
+docker run -p 8000:8000 assets-backend
+</code></pre>
+<h3 id="migrations">Migrations</h3>
+<pre><code class="language-bash">python manage.py makemigrations
+python manage.py migrate
+</code></pre>
+<hr />
+<h2 id="performance-optimization">Performance Optimization</h2>
+<ul>
+<li>Use <strong>select_related</strong> and <strong>prefetch_related</strong> to reduce query count.</li>
+<li>Add PostgreSQL <strong>indexes</strong> on foreign keys and frequently queried fields.</li>
+<li>Cache API responses for frequent reads.</li>
+<li>Configure <strong>Gunicorn</strong> workers for concurrency.</li>
+</ul>
+<hr />
+<h2 id="security-checklist">Security Checklist</h2>
+<ul>
+<li>Enforce HTTPS and secure cookies.</li>
+<li>Rotate JWT and refresh tokens periodically.</li>
+<li>Encrypt sensitive user data (AES-256).</li>
+<li>Use Django’s built-in CSRF protection.</li>
+<li>Regular vulnerability scans and dependency updates.</li>
+<li>Enable rate limiting and IP throttling.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

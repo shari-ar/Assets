@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🧩 API Reference - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter active" data-path="api-reference/">
+<a href="./">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="api-reference">API Reference</h1>
+<h2 id="overview">Overview</h2>
+<p>This document provides the API reference for the <strong>Assets</strong> platform. All endpoints are implemented using <strong>Django Ninja</strong> and protected via <strong>JWT authentication</strong> with optional OAuth 2.0 integration.</p>
+<p>Base URL: <code>https://{host}[:{port}]/api/v1/</code>
+Full Docs: <code>{Base-URL}/docs/</code></p>
+<hr />
+<h2 id="authentication">Authentication</h2>
+<h3 id="post-authlogin">POST <code>/auth/login/</code></h3>
+<p>Authenticate user with email and password, returning JWT tokens.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;email&quot;: &quot;user@example.com&quot;,
+  &quot;password&quot;: &quot;yourpassword&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;access&quot;: &quot;jwt_access_token&quot;,
+  &quot;refresh&quot;: &quot;jwt_refresh_token&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 1,
+    &quot;email&quot;: &quot;user@example.com&quot;,
+    &quot;role&quot;: &quot;user&quot;
+  }
+}
+</code></pre>
+<hr />
+<h3 id="post-authrefresh">POST <code>/auth/refresh/</code></h3>
+<p>Refresh access token using a valid refresh token.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;refresh&quot;: &quot;jwt_refresh_token&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;access&quot;: &quot;new_jwt_access_token&quot;
+}
+</code></pre>
+<hr />
+<h2 id="users">Users</h2>
+<h3 id="get-usersme">GET <code>/users/me/</code></h3>
+<p>Retrieve the authenticated user's profile.</p>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;email&quot;: &quot;user@example.com&quot;,
+  &quot;wallet_balance&quot;: 250.0,
+  &quot;role&quot;: &quot;user&quot;
+}
+</code></pre>
+<h3 id="patch-usersme">PATCH <code>/users/me/</code></h3>
+<p>Update user's profile details.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;first_name&quot;: &quot;Shahriyar&quot;,
+  &quot;last_name&quot;: &quot;A.R.&quot;
+}
+</code></pre>
+<hr />
+<h2 id="wallet">Wallet</h2>
+<h3 id="get-wallet">GET <code>/wallet/</code></h3>
+<p>Fetch wallet details and transaction history.</p>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;wallet_id&quot;: &quot;WAL123456&quot;,
+  &quot;balance&quot;: 250.0,
+  &quot;currency&quot;: &quot;IRR&quot;,
+  &quot;transactions&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;type&quot;: &quot;credit&quot;,
+      &quot;amount&quot;: 100,
+      &quot;timestamp&quot;: &quot;2025-11-01T14:32:00Z&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;type&quot;: &quot;debit&quot;,
+      &quot;amount&quot;: 50,
+      &quot;timestamp&quot;: &quot;2025-11-02T09:10:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="post-wallettransfer">POST <code>/wallet/transfer/</code></h3>
+<p>Transfer funds between users.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;recipient_id&quot;: 5,
+  &quot;amount&quot;: 20.0
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;transaction_id&quot;: &quot;TX998877&quot;
+}
+</code></pre>
+<hr />
+<h2 id="tickets">Tickets</h2>
+<h3 id="get-tickets">GET <code>/tickets/</code></h3>
+<p>List all user-related tickets.</p>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: 12,
+    &quot;asset_name&quot;: &quot;Canon EOS 5D&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;price&quot;: 120,
+    &quot;lender&quot;: &quot;alice@example.com&quot;,
+    &quot;borrower&quot;: &quot;bob@example.com&quot;
+  }
+]
+</code></pre>
+<h3 id="post-tickets">POST <code>/tickets/</code></h3>
+<p>Create a new asset lending request.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;asset_name&quot;: &quot;Laptop Dell XPS 13&quot;,
+  &quot;price&quot;: 150,
+  &quot;duration_days&quot;: 7
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: 15,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;message&quot;: &quot;Ticket created successfully.&quot;
+}
+</code></pre>
+<hr />
+<h3 id="patch-ticketsticket_idaccept">PATCH <code>/tickets/{ticket_id}/accept/</code></h3>
+<p>Accept a lending request (admin or lender only).</p>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: 15,
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;message&quot;: &quot;Ticket accepted and payment initiated.&quot;
+}
+</code></pre>
+<hr />
+<h2 id="reports">Reports</h2>
+<h3 id="get-reportsoverview">GET <code>/reports/overview/</code></h3>
+<p>Get financial and activity reports for user or admin dashboards.</p>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;total_users&quot;: 500,
+  &quot;total_tickets&quot;: 1200,
+  &quot;active_loans&quot;: 450,
+  &quot;total_volume&quot;: 35000000
+}
+</code></pre>
+<hr />
+<h2 id="errors">Errors</h2>
+<p>All endpoints return standardized error responses:</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+  &quot;detail&quot;: &quot;Invalid token or session expired.&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>HTTP Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Server Error</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

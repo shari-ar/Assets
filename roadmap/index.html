@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🚀 Roadmap - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter active" data-path="roadmap/">
+<a href="./">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="project-roadmap">Project Roadmap</h1>
+<h2 id="documented-capability-milestones">Documented Capability Milestones</h2>
+<table>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>Documented Capabilities</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Architecture Shell → Replace placeholder commands with real runtimes.</td>
+<td>Monorepo layout, TurboRepo structure, Docker Compose placeholders awaiting Django/Next.js apps.</td>
+<td><a href="../">Architecture</a></td>
+</tr>
+<tr>
+<td>Documented Auth Flows → Implement JWT + OAuth endpoints.</td>
+<td>Email/password &amp; OAuth login, refresh/logout, secure cookies, audit logging, security testing suite.</td>
+<td><a href="../auth-security/">Auth &amp; Security</a></td>
+</tr>
+<tr>
+<td>Backend Blueprint → Scaffold Django project and domain apps.</td>
+<td>Planned Django + Ninja stack, app responsibilities (auth, wallet, tickets, payments, reports, notifications), enable migrations &amp; Gunicorn.</td>
+<td><a href="../backend/">Backend</a></td>
+</tr>
+<tr>
+<td>Frontend Blueprint → Scaffold Next.js App Router experience.</td>
+<td>Next.js + HeroUI stack, planned routes (<code>/dashboard</code>, <code>/wallet</code>, <code>/tickets</code>, <code>/admin</code>), Zustand state, build commands.</td>
+<td><a href="../frontend/">Frontend</a></td>
+</tr>
+<tr>
+<td>Database Schema → Materialize core tables and constraints.</td>
+<td>Users, wallets, ledger entries, tickets, payments, reports, notifications tables with indexes and RLS guidance.</td>
+<td><a href="../database-schema/">Database Schema</a></td>
+</tr>
+<tr>
+<td>API Surface → Ship Ninja routers matching documented contracts.</td>
+<td>Auth, users, wallet, ticket, report endpoints with example payloads and error handling.</td>
+<td><a href="../api-reference/">API Reference</a></td>
+</tr>
+<tr>
+<td>Reporting Stack → Build dashboards &amp; exports pipeline.</td>
+<td>Role-based dashboards, Redis caching, aggregation jobs, CSV/PDF exports, performance considerations.</td>
+<td><a href="../dashboards-reporting/">Dashboards &amp; Reporting</a></td>
+</tr>
+<tr>
+<td>Payment Rails → Integrate Zarinpal adapter with ledger sync.</td>
+<td>Zarinpal endpoints, initiation/verification flows, sandbox creds, error codes, reconciliation steps, HMAC signatures.</td>
+<td><a href="../payment-integration/">Payment Integration</a></td>
+</tr>
+<tr>
+<td>Messaging Fabric → Stand up Celery-powered notifications.</td>
+<td>Multi-channel templates (SMS, WhatsApp, Email), retry logic, logging, admin broadcast tools, Prometheus metrics.</td>
+<td><a href="../notifications-messaging/">Notifications &amp; Messaging</a></td>
+</tr>
+<tr>
+<td>Role Enforcement → Enforce RBAC end-to-end.</td>
+<td>Admin/User roles, permission matrix, decorators, dashboard access rules, future roles.</td>
+<td><a href="../user-roles-permissions/">User Roles &amp; Permissions</a></td>
+</tr>
+<tr>
+<td>Quality Gates → Automate testing strategy.</td>
+<td>PyTest, Django Test Client, Jest/RTL, Playwright, Locust, Bandit/Safety workflows, fixtures and coverage guidance.</td>
+<td><a href="../testing/">Testing Guide</a></td>
+</tr>
+<tr>
+<td>Operational Platform → Turn DevOps scaffolding into CI/CD.</td>
+<td>GitHub Actions blueprints, Docker images, environment secrets, monitoring stack, Terraform/Ansible roadmap.</td>
+<td><a href="../devops-deployment/">DevOps &amp; Deployment</a></td>
+</tr>
+<tr>
+<td>Platform Cohesion → Align services with system design guardrails.</td>
+<td>Cross-service flows (auth, wallets, tickets), integration topology, scalability tactics, security principles.</td>
+<td><a href="../system-design/">System Design</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase-1-core-runtime-bring-up">Phase 1 — Core Runtime Bring-up</h2>
+<table>
+<thead>
+<tr>
+<th>Focus</th>
+<th>Based On</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activate Architecture Shell</td>
+<td>Architecture, Backend, Frontend</td>
+<td>Generate Django + Next.js projects and switch Compose/Dockerfile commands to real runtimes.</td>
+</tr>
+<tr>
+<td>Stand up Auth &amp; RBAC</td>
+<td>Auth &amp; Security, User Roles &amp; Permissions</td>
+<td>Build <code>/auth/login</code>, <code>/auth/refresh</code>, role-aware middlewares, and audit logging.</td>
+</tr>
+<tr>
+<td>Materialize Database Schema</td>
+<td>Database Schema</td>
+<td>Create migrations for users, wallets, tickets, payments, notifications with documented indexes.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase-2-transaction-data-foundations">Phase 2 — Transaction &amp; Data Foundations</h2>
+<table>
+<thead>
+<tr>
+<th>Focus</th>
+<th>Based On</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deliver API Surface</td>
+<td>API Reference, System Design</td>
+<td>Implement Ninja routers for users, wallet, tickets, reports and align responses to documented contracts.</td>
+</tr>
+<tr>
+<td>Wire Payment Rails</td>
+<td>Payment Integration, Database Schema</td>
+<td>Build Zarinpal initiation/verification, ledger reconciliation, and failure handling.</td>
+</tr>
+<tr>
+<td>Enable Messaging Fabric</td>
+<td>Notifications &amp; Messaging, System Design</td>
+<td>Launch Celery worker, channel adapters, and notification templates with retries.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase-3-experience-insight">Phase 3 — Experience &amp; Insight</h2>
+<table>
+<thead>
+<tr>
+<th>Focus</th>
+<th>Based On</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Launch Frontend Experience</td>
+<td>Frontend, API Reference</td>
+<td>Implement documented routes, state management, and API client wrappers to render live data.</td>
+</tr>
+<tr>
+<td>Build Reporting Stack</td>
+<td>Dashboards &amp; Reporting, Database Schema</td>
+<td>Implement aggregation jobs, Redis caching, and export endpoints powering dashboards.</td>
+</tr>
+<tr>
+<td>Establish Quality Gates</td>
+<td>Testing Guide, DevOps &amp; Deployment</td>
+<td>Enable automated lint/test pipelines, Playwright suite, and CI enforcement.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase-4-operational-maturity">Phase 4 — Operational Maturity</h2>
+<table>
+<thead>
+<tr>
+<th>Focus</th>
+<th>Based On</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Harden Operations</td>
+<td>DevOps &amp; Deployment</td>
+<td>Turn placeholder GitHub Actions into deploy pipelines, configure monitoring stack, and document rollback drills.</td>
+</tr>
+<tr>
+<td>Scale &amp; Secure Platform</td>
+<td>System Design, Auth &amp; Security</td>
+<td>Apply scalability patterns, enforce encryption practices, and finalize incident response workflows.</td>
+</tr>
+<tr>
+<td>Close Reporting Feedback Loop</td>
+<td>Dashboards &amp; Reporting, Testing Guide</td>
+<td>Add observability metrics, regression alerts, and usage analytics to refine product decisions.</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

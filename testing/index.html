@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🔍 Testing - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter active" data-path="testing/">
+<a href="./">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="testing-guide">Testing Guide</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> platform includes a comprehensive testing strategy to ensure the reliability, security, and correctness of both backend and frontend components. Testing is automated using <strong>PyTest</strong>, <strong>Django Test Client</strong>, and <strong>Playwright</strong>, with continuous integration handled through GitHub Actions.</p>
+<hr />
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Maintain <strong>high code quality</strong> through consistent automated tests.</li>
+<li>Validate <strong>API integrity</strong> and <strong>business logic correctness</strong>.</li>
+<li>Ensure <strong>frontend-backend integration</strong> remains stable.</li>
+<li>Catch regressions early via CI/CD pipelines.</li>
+</ul>
+<hr />
+<h2 id="testing-layers">Testing Layers</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Framework / Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Unit Tests</strong></td>
+<td>PyTest</td>
+<td>Test isolated functions and methods</td>
+</tr>
+<tr>
+<td><strong>Integration Tests</strong></td>
+<td>Django Test Client</td>
+<td>Verify API endpoints and DB transactions</td>
+</tr>
+<tr>
+<td><strong>E2E Tests</strong></td>
+<td>Playwright</td>
+<td>Simulate full user flows in browser</td>
+</tr>
+<tr>
+<td><strong>Static Analysis</strong></td>
+<td>Ruff / Bandit</td>
+<td>Linting and security checks</td>
+</tr>
+<tr>
+<td><strong>Load Tests</strong></td>
+<td>Locust</td>
+<td>Evaluate performance under stress</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="backend-testing">Backend Testing</h2>
+<h3 id="1-unit-tests">1. Unit Tests</h3>
+<ul>
+<li><strong>PyTest</strong> for lightweight, fast-running tests.</li>
+<li>Tests cover models, services, and utility functions.</li>
+</ul>
+<p><strong>Example (<code>tests/test_wallet.py</code>):</strong></p>
+<pre><code class="language-python">import pytest
+from apps.wallet.models import Wallet
+
+@pytest.mark.django_db
+def test_wallet_balance_update():
+    wallet = Wallet.objects.create(user_id=1, balance=100)
+    wallet.balance += 50
+    wallet.save()
+    assert wallet.balance == 150
+</code></pre>
+<p>Run all unit tests:</p>
+<pre><code class="language-bash">pytest -v
+</code></pre>
+<h3 id="2-integration-tests">2. Integration Tests</h3>
+<p>Integration tests use <strong>Django Test Client</strong> to simulate API requests.</p>
+<p><strong>Example (<code>tests/test_tickets.py</code>):</strong></p>
+<pre><code class="language-python">from django.test import Client
+
+def test_create_ticket():
+    client = Client()
+    client.login(email=&quot;user@example.com&quot;, password=&quot;1234&quot;)
+    response = client.post(&quot;/api/v1/tickets/&quot;, {&quot;asset_name&quot;: &quot;Camera&quot;, &quot;price&quot;: 100, &quot;duration_days&quot;: 5})
+    assert response.status_code == 200
+</code></pre>
+<p>Run integration tests with:</p>
+<pre><code class="language-bash">pytest tests/ --disable-warnings
+</code></pre>
+<hr />
+<h2 id="frontend-testing">Frontend Testing</h2>
+<h3 id="1-unit-component-tests">1. Unit &amp; Component Tests</h3>
+<p><strong>Tool:</strong> Jest + React Testing Library<br />
+Tests verify rendering, props, and user interactions.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-typescript">import { render, screen } from &quot;@testing-library/react&quot;;
+import WalletCard from &quot;@/components/dashboard/WalletCard&quot;;
+
+test(&quot;renders wallet balance&quot;, () =&gt; {
+  render(&lt;WalletCard balance={1000} /&gt;);
+  expect(screen.getByText(&quot;1000&quot;)).toBeInTheDocument();
+});
+</code></pre>
+<p>Run frontend tests:</p>
+<pre><code class="language-bash">npm run test
+</code></pre>
+<h3 id="2-end-to-end-e2e-tests">2. End-to-End (E2E) Tests</h3>
+<p><strong>Tool:</strong> Playwright<br />
+Simulates real browser interactions.</p>
+<p><strong>Example Scenario:</strong></p>
+<ol>
+<li>User logs in.</li>
+<li>Creates a new lending ticket.</li>
+<li>Completes payment flow.</li>
+</ol>
+<p><strong>Example Test (<code>tests/e2e/login.spec.ts</code>):</strong></p>
+<pre><code class="language-typescript">import { test, expect } from &quot;@playwright/test&quot;;
+
+test(&quot;user can log in&quot;, async ({ page }) =&gt; {
+  await page.goto(&quot;http://localhost:3000/auth/login&quot;);
+  await page.fill(&quot;input[name=email]&quot;, &quot;user@example.com&quot;);
+  await page.fill(&quot;input[name=password]&quot;, &quot;1234&quot;);
+  await page.click(&quot;button[type=submit]&quot;);
+  await expect(page).toHaveURL(&quot;/dashboard&quot;);
+});
+</code></pre>
+<p>Run E2E tests:</p>
+<pre><code class="language-bash">npx playwright test
+</code></pre>
+<hr />
+<h2 id="continuous-integration-ci">Continuous Integration (CI)</h2>
+<p>GitHub Actions automatically runs tests on each pull request.</p>
+<p><strong>Example Workflow (<code>.github/workflows/test.yml</code>):</strong></p>
+<pre><code class="language-yaml">name: CI Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: assets
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          npm ci --prefix frontend
+      - name: Run Backend Tests
+        run: pytest backend/tests/
+      - name: Run Frontend Tests
+        run: npm test --prefix frontend
+</code></pre>
+<hr />
+<h2 id="test-data-and-fixtures">Test Data and Fixtures</h2>
+<h3 id="seed-data">Seed Data</h3>
+<p>Seed scripts provide initial data for consistent test environments.</p>
+<p><strong>Command:</strong></p>
+<pre><code class="language-bash">python manage.py loaddata seed_data.json
+</code></pre>
+<h3 id="pytest-fixtures">PyTest Fixtures</h3>
+<p>Reusable components for user creation, wallet initialization, and ticket seeding.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">@pytest.fixture
+def user(db, django_user_model):
+    return django_user_model.objects.create_user(email=&quot;user@example.com&quot;, password=&quot;1234&quot;)
+</code></pre>
+<hr />
+<h2 id="performance-load-testing">Performance &amp; Load Testing</h2>
+<p>Use <strong>Locust</strong> for concurrent user simulations.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">from locust import HttpUser, task
+
+class AssetsUser(HttpUser):
+    @task
+    def view_dashboard(self):
+        self.client.get(&quot;/api/v1/reports/overview/&quot;)
+</code></pre>
+<p>Run load test:</p>
+<pre><code class="language-bash">locust -f locustfile.py
+</code></pre>
+<hr />
+<h2 id="security-testing">Security Testing</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bandit</strong></td>
+<td>Detect insecure Python code</td>
+</tr>
+<tr>
+<td><strong>Safety</strong></td>
+<td>Check dependencies for known vulnerabilities</td>
+</tr>
+<tr>
+<td><strong>OWASP ZAP</strong></td>
+<td>Automated web security scanning</td>
+</tr>
+</tbody>
+</table>
+<p>Example command:</p>
+<pre><code class="language-bash">bandit -r backend/
+safety check -r backend/requirements.txt
+</code></pre>
+<hr />
+<h2 id="coverage-reports">Coverage Reports</h2>
+<p>Generate test coverage reports to ensure code completeness.</p>
+<pre><code class="language-bash">pytest --cov=apps --cov-report=html
+</code></pre>
+<p>View results in <code>htmlcov/index.html</code>.</p>
+<hr />
+<h2 id="checklist">Checklist</h2>
+<ul>
+<li>Test both <strong>happy</strong> and <strong>failure</strong> paths.</li>
+<li>Keep tests <strong>idempotent</strong> and <strong>independent</strong>.</li>
+<li>Use <strong>factory methods</strong> for repeatable data creation.</li>
+<li>Run tests before each deployment.</li>
+<li>Use GitHub badges to display CI test status.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

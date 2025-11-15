@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>📘 Architecture - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="./css/style.min.css" rel="stylesheet">
+<link href="css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href="." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter active" data-path="">
+<a href=".">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="architecture">Architecture</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> project is a full‑stack, peer‑to‑peer asset lending platform built with a modern open‑source stack. It demonstrates how to combine <strong>Next.js</strong> with <strong>Django Ninja</strong> in a <strong>monorepo</strong> powered by <strong>TurboRepo</strong>. Users borrow and lend assets through ticket‑based requests, track balances via an integrated wallet, and handle payments using the Zarinpal gateway.</p>
+<h2 id="monorepo-layout">Monorepo Layout</h2>
+<p>The repository is organized as a monorepo using TurboRepo. Each folder at the root serves a distinct purpose:</p>
+<pre><code>/ (root)
+│  ├─ backend/   – Django project using Django Ninja for the API
+│  ├─ frontend/  – Next.js app using React and HeroUI for the UI
+│  ├─ packages/  – shared code (types, helpers)
+│  ├─ docs/      – project documentation
+│  ├─ mkdocs.yml – MkDocs configuration for documentation site
+│  └─ …
+</code></pre>
+<p>Having the server and client in one repository simplifies dependency management, encourages code sharing, and makes it easier to coordinate releases.</p>
+<h2 id="application-flow">Application Flow</h2>
+<p>The following diagram illustrates the high‑level flow of a typical session:</p>
+<pre><code>                  ┌───────────────┐           ┌──────────────┐          ┌───────────────┐
+    User ──────▶ │  Frontend      │ ───────▶ │  Backend     │ ───────▶│ Database      │
+                  │ (Next.js)     │           │ (Django)     │          │ (Postgres)    │
+                  └───────────────┘           └──────────────┘          └───────────────┘
+                         ▲                          │                          │
+                         │                          │                          │
+                         │                          ▼                          │
+                  OAuth 2.0 / JWT             Business logic            Persistent data
+</code></pre>
+<ol>
+<li><strong>Authentication:</strong> Users log in using Auth0 (SSO) or email/password via OAuth 2.0. Upon successful authentication, the frontend stores a short‑lived JWT in a secure cookie.</li>
+<li><strong>Frontend:</strong> Built with Next.js and HeroUI, it provides dashboards, forms for ticket creation, and wallet management. It communicates with the backend via REST endpoints.</li>
+<li><strong>Backend:</strong> Django + Django Ninja expose a versioned API. Services include authentication, wallet operations, ticket lifecycle management, and reporting.</li>
+<li><strong>Database:</strong> PostgreSQL stores users, roles, wallets, ledger entries, tickets, and audit logs. Row‑level security can be enabled for multi‑tenant scenarios.</li>
+<li><strong>Payments:</strong> The backend integrates with Zarinpal for payment processing; future gateways can be added via an adapter pattern.</li>
+</ol>
+<h2 id="backend-architecture">Backend Architecture</h2>
+<p>The <strong>backend</strong> folder contains a Django project configured with Django Ninja. Each module is structured as an app:</p>
+<ul>
+<li><strong>auth</strong> – handles OAuth 2.0, email/password login, JWT issuance, and role management.</li>
+<li><strong>wallet</strong> – manages user balances and ledger entries; interacts with payment providers.</li>
+<li><strong>tickets</strong> – CRUD operations for loan requests and approvals; manages ticket statuses and SLA logic.</li>
+<li><strong>reports</strong> – aggregates data for dashboards and exports (CSV, XLSX).</li>
+</ul>
+<p>The API is type‑hinted and auto‑documented via OpenAPI/Swagger, making it easy for developers to explore available endpoints.</p>
+<h2 id="database-schema-key-tables">Database Schema (Key Tables)</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users</code></td>
+<td>User accounts, including SSO subject and role.</td>
+</tr>
+<tr>
+<td><code>wallets</code></td>
+<td>One wallet per user; tracks balance and currency.</td>
+</tr>
+<tr>
+<td><code>ledger_entries</code></td>
+<td>Double‑entry accounting for wallet transactions.</td>
+</tr>
+<tr>
+<td><code>tickets</code></td>
+<td>Asset lending requests with status and pricing.</td>
+</tr>
+<tr>
+<td><code>ticket_comments</code></td>
+<td>Comments and attachments associated with tickets.</td>
+</tr>
+<tr>
+<td><code>audit_logs</code></td>
+<td>Records of security‑sensitive actions.</td>
+</tr>
+</tbody>
+</table>
+<p>This schema is defined in Django models and managed via migrations. Seed data is provided to facilitate local development and testing.</p>
+<h2 id="request-lifecycle-example">Request Lifecycle Example</h2>
+<p>To illustrate how components work together, consider the flow of creating a ticket:</p>
+<ol>
+<li><strong>Login:</strong> The user logs in via Auth0 (or email/password), receiving a JWT.</li>
+<li><strong>Create Ticket:</strong> On the frontend, the user fills out a form specifying the asset, desired duration, and price. The form posts to <code>POST /tickets/</code>.</li>
+<li><strong>Backend Processing:</strong> Django Ninja validates the request, creates a <code>Ticket</code> record in Postgres, and emits a notification to the lender via SMS/WhatsApp and email.</li>
+<li><strong>Lender Response:</strong> The lender accepts or declines via a PATCH endpoint; if accepted, the platform records a pending transaction.</li>
+<li><strong>Payment &amp; Ledger:</strong> Once both parties confirm, the wallet service debits the borrower’s balance and credits the lender’s. Ledger entries are written, and Zarinpal processes the external payment.</li>
+<li><strong>Completion:</strong> At the end of the loan period, the ticket status is updated and funds are settled accordingly.</li>
+</ol>
+<h2 id="security-considerations">Security Considerations</h2>
+<ul>
+<li><strong>Authentication &amp; Authorization:</strong> OAuth 2.0 and JWT ensure that only authenticated users can access protected routes. Role checks enforce permissions (admin vs user).</li>
+<li><strong>Transport &amp; Data Security:</strong> All traffic is served over HTTPS; sensitive data at rest is encrypted (e.g. AES for private keys). Passwords are hashed with modern algorithms like bcrypt.</li>
+<li><strong>Rate Limiting:</strong> The API includes rate limiting and CSRF protection to mitigate abuse.</li>
+<li><strong>Audit Logging:</strong> Administrative actions and wallet operations are logged for traceability.</li>
+</ul>
+<h2 id="extensibility-deployment">Extensibility &amp; Deployment</h2>
+<p>The project is intentionally modular:</p>
+<ul>
+<li><strong>Adapters:</strong> Payment providers are abstracted behind interfaces; adding support for other gateways (Stripe, Coinbase) requires minimal changes.</li>
+<li><strong>Services:</strong> Each domain (auth, wallet, tickets) can be extended independently, making it easy to introduce new features such as asset categories or escrow.</li>
+<li><strong>DevOps:</strong> The repository includes Docker and CI/CD configurations (GitHub Actions). Deployments can target platforms like Vercel (frontend) and Render/Railway/Fly (backend).</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="./js/main.js"></script>
+<script src="search/main.js"></script>
+<script src="./js/gitbook.min.js"></script>
+<script src="./js/theme.min.js"></script>
+</body>
+</html>

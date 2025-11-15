@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>💰 Payment Integration - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter active" data-path="payment-integration/">
+<a href="./">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="payment-integration">Payment Integration</h1>
+<h2 id="overview">Overview</h2>
+<p>This document describes the <strong>Zarinpal payment integration</strong> and wallet transaction flow used in the <strong>Assets</strong> platform. It ensures secure, auditable, and atomic payment operations across user wallets and the external payment gateway.</p>
+<hr />
+<h2 id="payment-gateway-zarinpal">Payment Gateway: Zarinpal</h2>
+<p>The system uses <strong>Zarinpal</strong> to handle IRR (Iranian Rial) payments securely via HTTPS with merchant authentication.</p>
+<h3 id="api-endpoints">API Endpoints</h3>
+<ul>
+<li><strong>Sandbox</strong> (testing): <code>https://sandbox.zarinpal.com/pg/v4/payment/</code></li>
+<li><strong>Production</strong> (live): <code>https://api.zarinpal.com/pg/v4/payment/</code></li>
+</ul>
+<h3 id="credentials-config">Credentials &amp; Config</h3>
+<table>
+<thead>
+<tr>
+<th>Environment Variable</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZARINPAL_MERCHANT_ID</code></td>
+<td>Unique merchant identifier</td>
+</tr>
+<tr>
+<td><code>ZARINPAL_CALLBACK_URL</code></td>
+<td>URL where users are redirected post-payment</td>
+</tr>
+<tr>
+<td><code>ZARINPAL_MODE</code></td>
+<td>Either <code>sandbox</code> or <code>production</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="integration-flow">Integration Flow</h3>
+<ol>
+<li>System sends a <strong>payment request</strong> with amount, description and callback URL.</li>
+<li>User is redirected to Zarinpal’s payment page.</li>
+<li>After payment, user returns to callback URL with payment status &amp; authority code.</li>
+<li>Backend calls Zarinpal’s <strong>verification API</strong> to confirm the transaction.</li>
+<li>Based on the verification result, system mark the order as successful or failed.</li>
+</ol>
+<hr />
+<h2 id="payment-workflow">Payment Workflow</h2>
+<h3 id="1-initiate-transaction">1. Initiate Transaction</h3>
+<h4 id="trigger">Trigger</h4>
+<p><strong><code>wallet_topup</code></strong> — activated when the user initiates a wallet recharge.</p>
+<h4 id="process">Process</h4>
+<ol>
+<li>User requests a wallet top-up from the frontend.</li>
+<li>Backend generates a <strong>unique order ID</strong> and records a pending transaction in the wallet ledger.</li>
+<li>A <code>PaymentRequest</code> is sent to <strong>Zarinpal</strong>, including the following data:</li>
+</ol>
+<p><strong>Example Request</strong></p>
+<pre><code class="language-json">{
+  &quot;merchant_id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+  &quot;amount&quot;: 500000,
+  &quot;description&quot;: &quot;Wallet top-up for user #12&quot;,
+  &quot;callback_url&quot;: &quot;https://{host}[:{port}]/api/v1/payments/verify/&quot;,
+  &quot;metadata&quot;: { &quot;user_id&quot;: 12, &quot;type&quot;: &quot;wallet_topup&quot; }
+}
+</code></pre>
+<p><strong>Example Response</strong></p>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;code&quot;: 100,
+    &quot;message&quot;: &quot;Payment request accepted&quot;,
+    &quot;authority&quot;: &quot;A00000000000000000000000000123456789&quot;
+  }
+}
+</code></pre>
+<ol>
+<li>The frontend redirects the user to Zarinpal’s payment page using the <code>authority</code> code.</li>
+</ol>
+<hr />
+<h3 id="2-verify-transaction-callback">2. Verify Transaction (Callback)</h3>
+<p>Once the user completes the payment, Zarinpal redirects to the callback URL with the following parameters:</p>
+<pre><code>https://{host}[:{port}]/api/v1/payments/verify/?Authority=A00000000000000000000000000123456789&amp;Status=OK
+</code></pre>
+<p>The backend then verifies the payment through Zarinpal’s <code>/PaymentVerification</code> API.</p>
+<p><strong>Example Request</strong></p>
+<pre><code class="language-json">{
+  &quot;merchant_id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+  &quot;amount&quot;: 500000,
+  &quot;authority&quot;: &quot;A00000000000000000000000000123456789&quot;
+}
+</code></pre>
+<p><strong>Example Response</strong></p>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;code&quot;: 100,
+    &quot;ref_id&quot;: 987654321,
+    &quot;message&quot;: &quot;Transaction verified successfully&quot;
+  }
+}
+</code></pre>
+<hr />
+<h2 id="error-handling">Error Handling</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Recommended Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>Success</td>
+<td>Payment verified</td>
+</tr>
+<tr>
+<td>101</td>
+<td>Already Verified</td>
+<td>Ignore duplicate callback</td>
+</tr>
+<tr>
+<td>-9</td>
+<td>Invalid Input</td>
+<td>Check parameters</td>
+</tr>
+<tr>
+<td>-22</td>
+<td>Merchant Disabled</td>
+<td>Contact Zarinpal support</td>
+</tr>
+<tr>
+<td>-40</td>
+<td>Invalid Merchant ID</td>
+<td>Verify environment configuration</td>
+</tr>
+<tr>
+<td>-54</td>
+<td>Transaction Not Found</td>
+<td>Check authority code and amount</td>
+</tr>
+</tbody>
+</table>
+<p>All failures trigger notifications and log entries with the full response payload.</p>
+<hr />
+<h2 id="security-practices">Security Practices</h2>
+<ul>
+<li><strong>HMAC-SHA256</strong> signatures used for request verification.</li>
+<li>All credentials are stored as environment variables and <strong>never committed</strong> to Git.</li>
+<li>Callback requests are validated by IP whitelisting and authority verification.</li>
+<li>Each payment request includes anti-replay nonce fields and timestamps.</li>
+<li>SSL/TLS enforced across all payment communications.</li>
+</ul>
+<hr />
+<h2 id="testing-in-sandbox-mode">Testing in Sandbox Mode</h2>
+<p>Sandbox responses mimic live transactions and allow testing without real payments (Set <code>ZARINPAL_SANDBOX=true</code> in the environment).</p>
+<p>Example testing card:</p>
+<pre><code>Card Number: 6104-3377-7777-7777
+Password: 123
+CVV2: 111
+Expire Date: 12/1404
+</code></pre>
+<hr />
+<h2 id="reconciliation-and-reporting">Reconciliation and Reporting</h2>
+<ul>
+<li>Daily reconciliation compares local transactions with Zarinpal’s report API.</li>
+<li>Mismatches trigger an automated alert and manual review task.</li>
+<li>Admin dashboard displays summary metrics:</li>
+<li>Total processed payments</li>
+<li>Failed/verifications pending</li>
+<li>Daily transaction volume</li>
+</ul>
+<hr />
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Add multi-gateway abstraction for supporting PayPing or IDPay.</li>
+<li>Integrate refund processing and partial settlements.</li>
+<li>Automate invoice generation and email confirmations.</li>
+<li>Expand payment webhooks for real-time notifications.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>
