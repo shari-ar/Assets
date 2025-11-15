@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/hooks/useAuth";
@@ -17,6 +17,7 @@ export function useRequireAuth({ roles, redirectTo = "/auth/login" }: RequireAut
     user: state.user,
     initialized: state.initialized,
   }));
+  const lastRedirectRef = useRef<string | null>(null);
 
   const rolesKey = useMemo(() => (roles ? [...roles].sort().join("|") : ""), [roles]);
   const normalizedRoles = useMemo(
@@ -30,13 +31,22 @@ export function useRequireAuth({ roles, redirectTo = "/auth/login" }: RequireAut
     }
 
     if (!user) {
-      router.replace(redirectTo);
+      if (lastRedirectRef.current !== redirectTo) {
+        lastRedirectRef.current = redirectTo;
+        router.replace(redirectTo);
+      }
       return;
     }
 
     if (normalizedRoles.length > 0 && !normalizedRoles.includes(user.role)) {
-      router.replace("/dashboard");
+      if (lastRedirectRef.current !== "/dashboard") {
+        lastRedirectRef.current = "/dashboard";
+        router.replace("/dashboard");
+      }
+      return;
     }
+
+    lastRedirectRef.current = null;
   }, [initialized, normalizedRoles, redirectTo, router, user]);
 
   const isAuthorized = Boolean(
