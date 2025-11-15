@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useShallow } from "zustand/react/shallow";
 
 import { useAuthStore } from "@/hooks/useAuth";
 import type { AuthUser } from "@/types/auth";
@@ -13,10 +14,12 @@ interface RequireAuthOptions {
 
 export function useRequireAuth({ roles, redirectTo = "/auth/login" }: RequireAuthOptions = {}) {
   const router = useRouter();
-  const { user, initialized } = useAuthStore((state) => ({
-    user: state.user,
-    initialized: state.initialized,
-  }));
+  const { user, initialized } = useAuthStore(
+    useShallow((state) => ({
+      user: state.user,
+      initialized: state.initialized,
+    })),
+  );
   const lastRedirectRef = useRef<string | null>(null);
 
   const rolesKey = useMemo(() => (roles ? [...roles].sort().join("|") : ""), [roles]);

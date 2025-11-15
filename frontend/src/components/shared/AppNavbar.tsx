@@ -2,16 +2,20 @@
 
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Avatar } from "@nextui-org/react";
 import NextLink from "next/link";
-import { APP_NAME } from "@/lib/config";
-import { useAuthStore } from "@/hooks/useAuth";
-import { logout } from "@/lib/auth";
 import { toast } from "react-toastify";
+import { useShallow } from "zustand/react/shallow";
+
+import { useAuthStore } from "@/hooks/useAuth";
+import { APP_NAME } from "@/lib/config";
+import { logout } from "@/lib/auth";
 
 export function AppNavbar() {
-  const { user, initialized } = useAuthStore((state) => ({
-    user: state.user,
-    initialized: state.initialized,
-  }));
+  const { user, initialized } = useAuthStore(
+    useShallow((state) => ({
+      user: state.user,
+      initialized: state.initialized,
+    })),
+  );
 
   const avatarLabel = user
     ? (user.fullName
