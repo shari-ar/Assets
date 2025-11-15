@@ -43,6 +43,19 @@ function shouldAttemptRefresh(url?: string) {
   return !authPaths.some((path) => url.endsWith(path));
 }
 
+function redirectToLogin() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const { pathname } = window.location;
+  if (pathname === "/auth/login") {
+    return;
+  }
+
+  window.location.href = "/auth/login";
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -71,9 +84,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         useAuthStore.getState().clearUser();
         flushQueue(false);
-        if (typeof window !== "undefined") {
-          window.location.href = "/auth/login";
-        }
+        redirectToLogin();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -82,9 +93,7 @@ api.interceptors.response.use(
 
     if (response?.status === 401) {
       useAuthStore.getState().clearUser();
-      if (typeof window !== "undefined") {
-        window.location.href = "/auth/login";
-      }
+      redirectToLogin();
     }
     return Promise.reject(error);
   },
