@@ -14,15 +14,10 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   const initialized = useAuthStore((state) => state.initialized);
 
-  useEffect(() => {
-    if (initialized) {
-      return;
-    }
-
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    if (hasFetchedRef.current) {
+    if (initialized || hasFetchedRef.current) {
       return;
     }
 

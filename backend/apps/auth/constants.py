@@ -5,6 +5,8 @@ from __future__ import annotations
 AUTH_EXEMPT_PATHS: tuple[str, ...] = (
     "/api/auth/login",
     "/api/auth/register",
+    "/api/auth/logout",
+    "/api/auth/refresh",
 )
 
 
