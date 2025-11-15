@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
+from .constants import is_auth_exempt_path
 from .models import AuthAuditLog, User
 from .tokens import validate_access_token
 from .utils import get_client_ip, get_user_agent
@@ -14,6 +15,9 @@ from .utils import get_client_ip, get_user_agent
 
 class JWTAuth(HttpBearer):
     def __call__(self, request: HttpRequest) -> dict[str, Any]:
+        if is_auth_exempt_path(request.path):
+            return {}
+
         auth_value = request.headers.get(self.header)
         token: str | None = None
         if auth_value:

@@ -8,6 +8,7 @@ declare module "axios" {
 }
 
 import { useAuthStore } from "@/hooks/useAuth";
+import { isAuthPublicEndpoint, isAuthPublicRoute } from "@/lib/routes";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 
@@ -36,11 +37,20 @@ function flushQueue(success: boolean) {
 }
 
 function shouldAttemptRefresh(url?: string) {
-  if (!url) {
-    return false;
+  return !isAuthPublicEndpoint(url);
+}
+
+function redirectToLogin() {
+  if (typeof window === "undefined") {
+    return;
   }
-  const authPaths = ["/auth/login", "/auth/register", "/auth/logout", "/auth/refresh"];
-  return !authPaths.some((path) => url.endsWith(path));
+
+  const { pathname } = window.location;
+  if (isAuthPublicRoute(pathname)) {
+    return;
+  }
+
+  window.location.href = "/auth/login";
 }
 
 function redirectToLogin() {
