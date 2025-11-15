@@ -8,6 +8,7 @@ declare module "axios" {
 }
 
 import { useAuthStore } from "@/hooks/useAuth";
+import { isAuthPublicEndpoint, isAuthPublicRoute } from "@/lib/routes";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 
@@ -36,12 +37,21 @@ function flushQueue(success: boolean) {
 }
 
 function shouldAttemptRefresh(url?: string) {
-  if (!url) {
-    return false;
-  }
-  const authPaths = ["/auth/login", "/auth/register", "/auth/logout", "/auth/refresh"];
-  return !authPaths.some((path) => url.endsWith(path));
+  return !isAuthPublicEndpoint(url);
 }
+
+const redirectToLoginIfNeeded = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const { pathname } = window.location;
+  if (isAuthPublicRoute(pathname)) {
+    return;
+  }
+
+  window.location.href = "/auth/login";
+};
 
 api.interceptors.response.use(
   (response) => response,
@@ -71,9 +81,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         useAuthStore.getState().clearUser();
         flushQueue(false);
-        if (typeof window !== "undefined") {
-          window.location.href = "/auth/login";
-        }
+        redirectToLoginIfNeeded();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -82,9 +90,7 @@ api.interceptors.response.use(
 
     if (response?.status === 401) {
       useAuthStore.getState().clearUser();
-      if (typeof window !== "undefined") {
-        window.location.href = "/auth/login";
-      }
+      redirectToLoginIfNeeded();
     }
     return Promise.reject(error);
   },
