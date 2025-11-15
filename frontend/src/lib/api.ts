@@ -53,6 +53,19 @@ function redirectToLogin() {
   window.location.href = "/auth/login";
 }
 
+function redirectToLogin() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const { pathname } = window.location;
+  if (pathname === "/auth/login") {
+    return;
+  }
+
+  window.location.href = "/auth/login";
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
