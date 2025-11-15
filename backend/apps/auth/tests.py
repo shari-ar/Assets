@@ -6,6 +6,7 @@ from django.db.utils import ProgrammingError
 from ninja.errors import HttpError
 
 from .api import admin_required, jwt_auth, user_required
+from .constants import is_auth_exempt_path
 from .models import AuthAuditLog, RefreshToken, User
 from .tokens import create_access_token
 
@@ -115,6 +116,12 @@ class AuthApiTests(TestCase):
         payload = response.json()
         self.assertEqual(payload["email"], self.user.email)
         self.assertEqual(payload["role"], self.user.role)
+
+    def test_auth_exempt_paths_cover_refresh_and_logout(self) -> None:
+        self.assertTrue(is_auth_exempt_path("/api/auth/refresh"))
+        self.assertTrue(is_auth_exempt_path("/api/auth/logout"))
+        self.assertTrue(is_auth_exempt_path("/api/auth/refresh/extra"))
+        self.assertFalse(is_auth_exempt_path("/api/auth/me"))
 
     def test_jwt_auth_and_role_requirements(self) -> None:
         token = create_access_token(self.user)

@@ -53,19 +53,6 @@ function redirectToLogin() {
   window.location.href = "/auth/login";
 }
 
-const redirectToLoginIfNeeded = () => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const { pathname } = window.location;
-  if (isAuthPublicRoute(pathname)) {
-    return;
-  }
-
-  window.location.href = "/auth/login";
-};
-
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
