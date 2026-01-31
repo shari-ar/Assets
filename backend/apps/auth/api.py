@@ -109,16 +109,20 @@ def register(request, payload: RegisterRequest) -> Response:
             user=None,
             successful=False,
             metadata={"reason": "email_conflict"},
-        )
-       
+            return Response({"email": ["A user with that email already exists."]}, status=400)
 
-               return Response({"email": ["A user with that email already exists."]}, status=400)
+       )
+
+ 
+        log_event(
         request=request,
         action=AuthAuditLog.Action.REGISTER,
         email=user.email,
         user=user,
         successful=True,
     )
+    return Response(_user_payload(user), status=201)
+
 
     return Response(_user_payload(user), status=201)
 
