@@ -92,7 +92,7 @@ def register(request, payload: RegisterRequest) -> Response:
             successful=False,
             metadata={"errors": exc.messages},
         )
-        raise HttpError(400, {"password": exc.messages}) from exc
+        return Response({"password": exc.messages}, status=400)   
 
     try:
         user = User.objects.create_user(
@@ -110,9 +110,9 @@ def register(request, payload: RegisterRequest) -> Response:
             successful=False,
             metadata={"reason": "email_conflict"},
         )
-        raise HttpError(400, {"email": ["A user with that email already exists."]}) from exc
+       
 
-    log_event(
+               return Response({"email": ["A user with that email already exists."]}, status=400)
         request=request,
         action=AuthAuditLog.Action.REGISTER,
         email=user.email,
