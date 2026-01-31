@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>🪄 Frontend - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter active" data-path="frontend/">
+<a href="./">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="frontend">Frontend</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> frontend is a modern, responsive, and component-driven web application built with <strong>Next.js</strong> and <strong>HeroUI</strong>. It serves as the user interface for managing authentication, asset lending, ticket tracking, wallets, and dashboards.</p>
+<hr />
+<h2 id="tech-stack">Tech Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td><strong>Next.js</strong></td>
+<td>Server-side rendering (SSR) and routing</td>
+</tr>
+<tr>
+<td>UI Library</td>
+<td><strong>HeroUI 2.8.x</strong></td>
+<td>Modern responsive UI components</td>
+</tr>
+<tr>
+<td>State Management</td>
+<td><strong>Zustand</strong> or <strong>React Context</strong></td>
+<td>Global state handling for auth and wallet</td>
+</tr>
+<tr>
+<td>Styling</td>
+<td><strong>Tailwind CSS</strong></td>
+<td>Utility-first CSS framework</td>
+</tr>
+<tr>
+<td>Forms</td>
+<td><strong>React Hook Form</strong></td>
+<td>Form handling and validation</td>
+</tr>
+<tr>
+<td>Charts</td>
+<td><strong>Recharts</strong></td>
+<td>Data visualization for reports</td>
+</tr>
+<tr>
+<td>HTTP Client</td>
+<td><strong>Axios</strong></td>
+<td>Communication with Django Ninja API</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td><strong>React Toastify</strong></td>
+<td>Feedback and alerts</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td><strong>JWT</strong> (via HttpOnly cookie)</td>
+<td>Secure session management</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="project-structure">Project Structure</h2>
+<pre><code>frontend/
+├── app/
+│   ├── (auth)/                # Auth-related pages (login, register, reset password)
+│   ├── (dashboard)/           # User and admin dashboards
+│   ├── (tickets)/             # Ticket management pages
+│   ├── (wallet)/              # Wallet and transaction views
+│   ├── layout.tsx             # Global layout and header
+│   └── page.tsx               # Default landing page
+├── components/
+│   ├── ui/                    # HeroUI component wrappers
+│   ├── forms/                 # Custom reusable form components
+│   ├── dashboard/             # Widgets and charts
+│   └── shared/                # Common UI elements (Navbar, Footer, etc.)
+├── hooks/
+│   └── useAuth.ts             # Auth helper hook
+├── lib/
+│   ├── api.ts                 # Axios instance and interceptors
+│   ├── auth.ts                # JWT utilities
+│   └── config.ts              # Global constants
+├── public/                    # Static assets
+├── styles/                    # Global and Tailwind CSS
+├── types/                     # TypeScript interfaces
+└── package.json
+</code></pre>
+<hr />
+<h2 id="routing-pages">Routing &amp; Pages</h2>
+<p>Next.js <strong>App Router</strong> (<code>/app</code> directory) handles routing.<br />
+Each route corresponds to a logical module (e.g., <code>/wallet</code>, <code>/tickets</code>).<br />
+Dynamic routes (e.g., <code>/tickets/[id]</code>) display detailed ticket info.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>Landing page with overview and login/register buttons</td>
+</tr>
+<tr>
+<td><code>/auth/login</code></td>
+<td>User authentication page</td>
+</tr>
+<tr>
+<td><code>/auth/register</code></td>
+<td>Sign-up form (email/password)</td>
+</tr>
+<tr>
+<td><code>/dashboard</code></td>
+<td>Personalized user dashboard</td>
+</tr>
+<tr>
+<td><code>/wallet</code></td>
+<td>Wallet overview, transaction history, fund transfers</td>
+</tr>
+<tr>
+<td><code>/tickets</code></td>
+<td>List and manage user’s asset lending requests</td>
+</tr>
+<tr>
+<td><code>/admin</code></td>
+<td>Admin dashboard (for admins only)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-integration">API Integration</h2>
+<p>All data is fetched from the <strong>Django Ninja API</strong> using the configured Axios client.</p>
+<p><strong>Example API Client (<code>lib/api.ts</code>):</strong></p>
+<pre><code class="language-typescript">import axios from &quot;axios&quot;;
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
+});
+
+api.interceptors.response.use(
+  (response) =&gt; response,
+  (error) =&gt; {
+    if (error.response?.status === 401) {
+      window.location.href = &quot;/auth/login&quot;;
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+</code></pre>
+<p><strong>Example Usage:</strong></p>
+<pre><code class="language-typescript">import api from &quot;@/lib/api&quot;;
+
+export async function fetchTickets() {
+  const { data } = await api.get(&quot;/tickets/&quot;);
+  return data;
+}
+</code></pre>
+<hr />
+<h2 id="authentication-flow">Authentication Flow</h2>
+<ol>
+<li>User logs in via <code>/auth/login</code> → backend issues <strong>JWT</strong> in an HttpOnly cookie.</li>
+<li>Auth state is persisted client-side using a secure API call to <code>/users/me/</code>.</li>
+<li>Protected routes are wrapped in a <strong><code>RequireAuth</code></strong> higher-order component (HOC).</li>
+<li>Unauthorized users are redirected to <code>/auth/login</code> automatically.</li>
+</ol>
+<hr />
+<h2 id="state-management">State Management</h2>
+<p><strong>Auth Context (Example):</strong></p>
+<pre><code class="language-typescript">import { createContext, useContext, useState } from &quot;react&quot;;
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) =&gt; {
+  const [user, setUser] = useState(null);
+
+  const login = async (email, password) =&gt; {
+    const { data } = await api.post(&quot;/auth/login/&quot;, { email, password });
+    setUser(data.user);
+  };
+
+  return (
+    &lt;AuthContext.Provider value={{ user, login }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+};
+
+export const useAuth = () =&gt; useContext(AuthContext);
+</code></pre>
+<hr />
+<h2 id="ui-design-guidelines">UI Design Guidelines</h2>
+<ul>
+<li><strong>Color Palette:</strong> Neutral background, HeroUI primary theme, soft shadows, rounded corners.</li>
+<li><strong>Typography:</strong> Vazirmatn font for readability.</li>
+<li><strong>Layout:</strong> Responsive grid with sidebar navigation for dashboards.</li>
+<li><strong>Accessibility &amp; Dark Mode:</strong> Handled by HeroUI.</li>
+</ul>
+<hr />
+<h2 id="testing">Testing</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit Tests</td>
+<td>Jest</td>
+<td>Component-level tests</td>
+</tr>
+<tr>
+<td>Integration Tests</td>
+<td>Playwright</td>
+<td>End-to-end testing of user flows</td>
+</tr>
+<tr>
+<td>Linting</td>
+<td>ESLint + Prettier</td>
+<td>Code quality enforcement</td>
+</tr>
+</tbody>
+</table>
+<p>Run all tests:</p>
+<pre><code class="language-bash">npm run test
+</code></pre>
+<hr />
+<h2 id="deployment">Deployment</h2>
+<p>Frontend is deployed via GHCR.</p>
+<hr />
+<h2 id="performance-optimization">Performance Optimization</h2>
+<ul>
+<li><strong>Static Rendering (SSG)</strong> for public pages.</li>
+<li><strong>Incremental Static Regeneration (ISR)</strong> for dashboards.</li>
+<li><strong>Dynamic Imports</strong> for heavy components.</li>
+<li><strong>Image Optimization</strong> via Next.js <code>&lt;Image /&gt;</code>.</li>
+<li><strong>Caching:</strong> HTTP-level caching for API responses.</li>
+</ul>
+<hr />
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Offline support with Service Workers.</li>
+<li>Progressive Web App (PWA) mode.</li>
+<li>Advanced animations with Framer Motion.</li>
+<li>Localization (i18n) for multi-language support.</li>
+<li>Component theming using CSS variables.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

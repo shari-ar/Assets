@@ -1,0 +1,12 @@
+nav[role="navigation"] > ul.summary > li:first-child a {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+nav[role="navigation"] > ul.summary > li:nth-last-child(-n + 3) {
+  display: none;
+}
+
+.search-results {
+  display: none;
+}

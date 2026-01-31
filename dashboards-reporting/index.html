@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>📈 Dashboards & Reporting - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter" data-path="notifications-messaging/">
+<a href="../notifications-messaging/">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter active" data-path="dashboards-reporting/">
+<a href="./">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="dashboards-reporting">Dashboards &amp; Reporting</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> platform provides interactive dashboards and analytical reports to give users and administrators real-time insights into system activity. This page describes how reporting data is collected, processed, and visualized within both the <strong>frontend</strong> (Next.js + Recharts) and <strong>backend</strong> (Django + Ninja) systems.</p>
+<hr />
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Provide <strong>real-time visibility</strong> into user activity and transactions.</li>
+<li>Offer <strong>role-based dashboards</strong> for users and admins.</li>
+<li>Generate <strong>financial and operational reports</strong> for audits.</li>
+<li>Enable <strong>data aggregation</strong> and <strong>trend analysis</strong> over time.</li>
+</ul>
+<hr />
+<h2 id="dashboard-types">Dashboard Types</h2>
+<table>
+<thead>
+<tr>
+<th>Dashboard</th>
+<th>Audience</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User Dashboard</strong></td>
+<td>Regular Users</td>
+<td>Displays wallet balance, ticket history, and activity summary.</td>
+</tr>
+<tr>
+<td><strong>Admin Dashboard</strong></td>
+<td>Administrators</td>
+<td>Monitors global metrics, financial summaries, and system logs.</td>
+</tr>
+<tr>
+<td><strong>Reports Dashboard</strong></td>
+<td>Management</td>
+<td>Aggregated analytics with exportable reports.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-sources">Data Sources</h2>
+<p>Dashboards pull data from multiple backend services and tables:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wallets</code></td>
+<td>Tracks user balances and transactions.</td>
+</tr>
+<tr>
+<td><code>tickets</code></td>
+<td>Stores asset lending and borrowing activity.</td>
+</tr>
+<tr>
+<td><code>payments</code></td>
+<td>Logs verified transactions from Zarinpal.</td>
+</tr>
+<tr>
+<td><code>reports</code></td>
+<td>Pre-aggregated daily metrics for performance.</td>
+</tr>
+<tr>
+<td><code>notifications</code></td>
+<td>Logs of user alerts and message statuses.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="backend-architecture">Backend Architecture</h2>
+<p>The backend reporting engine is implemented under the <code>reports</code> app.</p>
+<p><strong>Key Modules:</strong>
+| Module | Description |
+|------------------|------------------------------------------------------------------|
+| <code>models.py</code> | Defines the <code>Report</code> and <code>AnalyticsRecord</code> models. |
+| <code>tasks.py</code> | Handles nightly aggregation jobs. |
+| <code>views.py</code> | Exposes <code>/reports/overview/</code> and <code>/reports/metrics/</code> endpoints. |
+| <code>serializers.py</code> | Converts report objects to JSON format for the frontend. |</p>
+<hr />
+<h2 id="aggregation-process">Aggregation Process</h2>
+<p>Reports are generated through a combination of scheduled jobs and on-demand API requests.</p>
+<hr />
+<h2 id="key-metrics-displayed">Key Metrics Displayed</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Total Users</strong></td>
+<td>Registered users in the system.</td>
+</tr>
+<tr>
+<td><strong>Active Loans</strong></td>
+<td>Number of ongoing lending agreements.</td>
+</tr>
+<tr>
+<td><strong>Total Tickets</strong></td>
+<td>All tickets created to date.</td>
+</tr>
+<tr>
+<td><strong>Total Volume</strong></td>
+<td>Total IRR volume processed through payments.</td>
+</tr>
+<tr>
+<td><strong>Wallet Balances</strong></td>
+<td>Aggregate sum of all user wallet balances.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="admin-dashboard-features">Admin Dashboard Features</h2>
+<ul>
+<li><strong>Data Overview Cards:</strong> Display total users, loans, and revenue.</li>
+<li><strong>Ticket Monitoring:</strong> Active vs. completed ticket ratio.</li>
+<li><strong>Revenue Analysis:</strong> Daily and monthly transaction trends.</li>
+<li><strong>Export Reports:</strong> CSV and PDF export for financial audits.</li>
+<li><strong>Filters:</strong> Time range, asset type, or user segment filters.</li>
+</ul>
+<hr />
+<h2 id="exports-integrations">Exports &amp; Integrations</h2>
+<p>Reports can be exported or shared via integrations.</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CSV</strong></td>
+<td>Data export for analysis in spreadsheets.</td>
+</tr>
+<tr>
+<td><strong>PDF</strong></td>
+<td>Printable summaries for stakeholders.</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>JSON output for integrations or third-party analytics tools.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="performance-considerations">Performance Considerations</h2>
+<ul>
+<li>Reports are <strong>cached</strong> in Redis for fast retrieval.</li>
+<li>Heavy queries are executed asynchronously.</li>
+<li>Charts and tables use lazy loading and pagination.</li>
+<li>Indexes on <code>report_date</code> and <code>status</code> fields improve query speed.</li>
+</ul>
+<hr />
+<h2 id="security-access-control">Security &amp; Access Control</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Access Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Full access to all reports and analytics.</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td>Access limited to their own statistics.</td>
+</tr>
+<tr>
+<td><strong>Auditor (future)</strong></td>
+<td>Read-only access to financial reports.</td>
+</tr>
+</tbody>
+</table>
+<p>Reports are served via authenticated endpoints with <strong>JWT</strong> and <strong>role-based access control (RBAC)</strong>.</p>
+<hr />
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Real-time updates using WebSockets.</li>
+<li>Predictive analytics using historical data.</li>
+<li>Interactive filtering with drill-down reports.</li>
+<li>Multi-currency and regional reporting support.</li>
+<li>AI-driven anomaly detection for transactions.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>

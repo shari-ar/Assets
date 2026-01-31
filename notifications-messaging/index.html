@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>📲 Notifications & Messaging - Assets</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL">
+<meta name="generator" content="mkdocs-1.6.1, mkdocs-gitbook-1.0.7">
+<meta name="author" content="Shahriyar Gorgany">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta rel="next" href="" />
+<link href="../css/style.min.css" rel="stylesheet">
+<link href="../css/extra.css" rel="stylesheet"> 
+</head>
+
+<body>
+<div class="book">
+<div class="book-summary">
+<div id="book-search-input" role="search">
+<input type="text" placeholder="Type to search" />
+</div> <!-- end of book-search-input -->
+
+<nav role="navigation">
+<ul class="summary">
+<li>
+<a href=".." target="_blank" class="custom-link">Assets</a>
+</li>
+<li class="divider"></li>
+<li class="chapter" data-path="">
+<a href="..">📘 Architecture</a>
+<li class="chapter" data-path="roadmap/">
+<a href="../roadmap/">🚀 Roadmap</a>
+<li class="chapter" data-path="system-design/">
+<a href="../system-design/">🧱 System Design Spec</a>
+<li class="chapter" data-path="api-reference/">
+<a href="../api-reference/">🧩 API Reference</a>
+<li class="chapter" data-path="auth-security/">
+<a href="../auth-security/">🔐 Auth & Security</a>
+<li class="chapter" data-path="payment-integration/">
+<a href="../payment-integration/">💰 Payment Integration</a>
+<li class="chapter" data-path="database-schema/">
+<a href="../database-schema/">🧮 Database Schema</a>
+<li class="chapter" data-path="frontend/">
+<a href="../frontend/">🪄 Frontend</a>
+<li class="chapter" data-path="backend/">
+<a href="../backend/">⚙️ Backend</a>
+<li class="chapter" data-path="testing/">
+<a href="../testing/">🔍 Testing</a>
+<li class="chapter" data-path="devops-deployment/">
+<a href="../devops-deployment/">🧠 DevOps & Deployment</a>
+<li class="chapter active" data-path="notifications-messaging/">
+<a href="./">📲 Notifications & Messaging</a>
+<li class="chapter" data-path="user-roles-permissions/">
+<a href="../user-roles-permissions/">👥 User Roles & Permissions</a>
+<li class="chapter" data-path="dashboards-reporting/">
+<a href="../dashboards-reporting/">📈 Dashboards & Reporting</a>
+<li class="divider"></li>
+
+
+
+<li><a href="http://www.mkdocs.org">
+Published with MkDocs
+</a></li>
+
+<li><a href="https://github.com/GitbookIO/theme-default">
+Theme by GitBook
+</a></li>
+</ul>
+
+</nav>
+
+</div> <!-- end of book-summary -->
+
+<div class="book-body">
+<div class="body-inner">
+<div class="book-header" role="navigation">
+
+<!-- Title -->
+<h1>
+<i class="fa fa-circle-o-notch fa-spin"></i>
+<a href="." ></a>
+</h1>
+
+</div> <!-- end of book-header -->
+
+<div class="page-wrapper" tabindex="-1" role="main">
+<div class="page-inner">
+<div id="book-search-results">
+<div class="search-noresults">
+
+<section class="normal markdown-section">
+
+
+
+<h1 id="notifications-messaging">Notifications &amp; Messaging</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Assets</strong> platform includes a comprehensive <strong>Notifications &amp; Messaging</strong> subsystem that delivers real-time and asynchronous updates to users. It supports multiple communication channels—<strong>SMS</strong>, <strong>WhatsApp</strong>, and <strong>Email</strong>—to ensure high engagement and transparency throughout the asset lending process.</p>
+<hr />
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Provide timely and reliable notifications to users.</li>
+<li>Support multi-channel delivery (SMS, WhatsApp, Email).</li>
+<li>Allow admin and automated system alerts.</li>
+<li>Enable retry mechanisms for failed messages.</li>
+<li>Maintain auditable logs for compliance and debugging.</li>
+</ul>
+<hr />
+<h2 id="features">Features</h2>
+<ul>
+<li>Multi-channel support (Email, SMS, WhatsApp).</li>
+<li>Configurable message templates with dynamic data.</li>
+<li>Centralized logging and retry on failure.</li>
+<li>Background job processing with Celery.</li>
+<li>Admin control for broadcasting messages.</li>
+</ul>
+<hr />
+<h2 id="notification-flow">Notification Flow</h2>
+<ol>
+<li><strong>Event Triggered</strong> – A system action (e.g., payment verified, ticket approved) triggers a notification.</li>
+<li><strong>Message Created</strong> – The backend generates a <code>Notification</code> record with placeholders and metadata.</li>
+<li><strong>Queue Dispatch</strong> – Message is queued in Celery and sent asynchronously.</li>
+<li><strong>Delivery Attempt</strong> – The appropriate adapter (SMS, WhatsApp, Email) processes and sends it.</li>
+<li><strong>Status Update</strong> – On success or failure, the record is updated with a timestamp and provider response.</li>
+</ol>
+<hr />
+<h2 id="database-schema">Database Schema</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>SERIAL</td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>INT (FK → users.id)</td>
+<td>Target recipient</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td>ENUM('sms', 'whatsapp', 'email')</td>
+<td>Delivery medium</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>TEXT</td>
+<td>Full message content</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>ENUM('queued','sent','failed')</td>
+<td>Delivery state</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP</td>
+<td>Time created</td>
+</tr>
+<tr>
+<td><code>sent_at</code></td>
+<td>TIMESTAMP</td>
+<td>Time sent</td>
+</tr>
+<tr>
+<td><code>error_log</code></td>
+<td>TEXT</td>
+<td>Error details if any</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>idx_notifications_user</code></li>
+<li><code>idx_notifications_status</code></li>
+</ul>
+<hr />
+<h2 id="message-templates">Message Templates</h2>
+<p>Templates are stored as Markdown files and rendered with variables using Django’s <code>Template</code> engine.</p>
+<p><strong>Example Template (<code>templates/notifications/ticket_accepted.txt</code>):</strong></p>
+<pre><code>Hello {{ user.first_name }},
+
+Your lending request for &quot;{{ ticket.asset_name }}&quot; has been accepted.
+The payment of {{ ticket.price }} IRR has been processed successfully.
+
+Ticket ID: {{ ticket.id }}
+Status: {{ ticket.status }}
+
+Thank you for using Assets Platform!
+</code></pre>
+<p><strong>Render Example:</strong></p>
+<pre><code class="language-python">from django.template.loader import render_to_string
+
+message = render_to_string(&quot;notifications/ticket_accepted.txt&quot;, {
+    &quot;user&quot;: user,
+    &quot;ticket&quot;: ticket
+})
+</code></pre>
+<hr />
+<h2 id="channels">Channels</h2>
+<h3 id="1-email">1. Email</h3>
+<ul>
+<li>Sent via <strong>Postmark</strong>.</li>
+<li>Supports HTML templates and attachments.</li>
+<li>Utilizes Django’s built-in email backend with async wrappers.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">from django.core.mail import send_mail
+
+send_mail(
+    subject=&quot;Ticket Approved&quot;,
+    message=message_text,
+    from_email=&quot;no-reply@assets.example.com&quot;,
+    recipient_list=[user.email]
+)
+</code></pre>
+<h3 id="2-sms">2. SMS</h3>
+<ul>
+<li>Integrates with <a href="https://sms.ir/"><strong>sms.ir</strong></a>.</li>
+<li>Short messages for transaction and verification updates.</li>
+</ul>
+<p><strong>Example SMS Payload:</strong></p>
+<pre><code class="language-json">{
+  &quot;receptor&quot;: &quot;+989123456789&quot;,
+  &quot;message&quot;: &quot;Your ticket #42 has been approved.&quot;
+}
+</code></pre>
+<h3 id="3-whatsapp">3. WhatsApp</h3>
+<ul>
+<li>Uses Twilio for message delivery.</li>
+<li>Supports template-based and custom messages.</li>
+<li>Requires verified business account and webhook setup.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">import requests
+
+requests.post(&quot;https://graph.facebook.com/v17.0/&lt;phone_id&gt;/messages&quot;, json={
+  &quot;messaging_product&quot;: &quot;whatsapp&quot;,
+  &quot;to&quot;: &quot;+989123456789&quot;,
+  &quot;type&quot;: &quot;text&quot;,
+  &quot;text&quot;: {&quot;body&quot;: &quot;Your wallet has been credited with 100,000 IRR.&quot;}
+})
+</code></pre>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<p>All notification services are configured via environment variables and Docker Secrets.</p>
+<hr />
+<h2 id="background-processing-celery">Background Processing (Celery)</h2>
+<p>Notifications are sent asynchronously to improve response times.</p>
+<hr />
+<h2 id="admin-interface">Admin Interface</h2>
+<ul>
+<li>Admins can resend failed notifications.</li>
+<li>Dashboard metrics display delivery rates and errors.</li>
+<li>Filters available for date, channel, and status.</li>
+</ul>
+<hr />
+<h2 id="testing-notifications">Testing Notifications</h2>
+<p>Use <strong>Django’s Email Backend Debug Mode</strong> for local testing:</p>
+<pre><code>EMAIL_BACKEND = &quot;django.core.mail.backends.console.EmailBackend&quot;
+</code></pre>
+<p>To test SMS and WhatsApp locally, mock provider APIs using <strong>responses</strong>.</p>
+<hr />
+<h2 id="logging-monitoring">Logging &amp; Monitoring</h2>
+<ul>
+<li>All events stored in the <code>notifications</code> table.</li>
+<li>Failures logged in Django’s log system and sent to <strong>Sentry</strong>.</li>
+<li>Prometheus metrics track delivery latency and failure rates.</li>
+</ul>
+<p><strong>Example Metric Labels:</strong></p>
+<pre><code>notifications_sent_total{channel=&quot;email&quot;}
+notifications_failed_total{channel=&quot;sms&quot;}
+notifications_latency_seconds{channel=&quot;whatsapp&quot;}
+</code></pre>
+<hr />
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Push notification support (Firebase Cloud Messaging).</li>
+<li>User preference center for notification settings.</li>
+<li>Delivery analytics dashboard.</li>
+<li>Multi-language template system.</li>
+<li>AI-based message personalization.</li>
+</ul>
+
+
+</section>
+</div> <!-- end of search-noresults -->
+<div class="search-results">
+<div class="has-results">
+
+<h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+<ul class="search-results-list"></ul>
+
+</div> <!-- end of has-results -->
+<div class="no-results">
+
+<h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+
+</div> <!-- end of no-results -->
+</div> <!-- end of search-results -->
+</div> <!-- end of book-search-results -->
+
+</div> <!-- end of page-inner -->
+</div> <!-- end of page-wrapper -->
+
+</div> <!-- end of body-inner -->
+
+</div> <!-- end of book-body -->
+<script src="../js/main.js"></script>
+<script src="../search/main.js"></script>
+<script src="../js/gitbook.min.js"></script>
+<script src="../js/theme.min.js"></script>
+</body>
+</html>
