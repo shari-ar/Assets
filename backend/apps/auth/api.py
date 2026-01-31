@@ -109,10 +109,10 @@ def register(request, payload: RegisterRequest) -> Response:
             user=None,
             successful=False,
             metadata={"reason": "email_conflict"},
-            return Response({"email": ["A user with that email already exists."]}, status=400)
-
+            
        )
 
+                       return Response({"email": ["A user with that email already exists." ]}, status=400)
  
         log_event(
         request=request,
@@ -123,8 +123,7 @@ def register(request, payload: RegisterRequest) -> Response:
     )
     return Response(_user_payload(user), status=201)
 
-
-    return Response(_user_payload(user), status=201)
+    
 
 
 @router.post("login", response=LoginResponse, summary="Authenticate a user and issue tokens")
