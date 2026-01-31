@@ -112,7 +112,7 @@ def register(request, payload: RegisterRequest) -> Response:
             
        )
 
-                       return Response({"email": ["A user with that email already exists." ]}, status=400)
+         return Response({"email": ["A user with that email already exists." ]}, status=400)
  
         log_event(
         request=request,
